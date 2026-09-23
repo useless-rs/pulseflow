@@ -1,0 +1,130 @@
+{
+ "project": "PulseFlow",
+ "scoring": "impact(1-5) x (6-effort) - risk, highest first",
+ "active": [
+  {
+   "id": 1,
+   "title": "Strict auth rate limit + trust proxy",
+   "impact": 5,
+   "effort": 1,
+   "risk": 1,
+   "status": "done"
+  },
+  {
+   "id": 2,
+   "title": "Fix Dockerfiles (self-contained npm install; --workspace install has no root package.json)",
+   "impact": 5,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 3,
+   "title": "Fix CI (npm ci at root, build+test all workspaces, typechecks)",
+   "impact": 4,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 4,
+   "title": "Dashboard live data (KPIs/activity from /stats + /tasks)",
+   "impact": 4,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 5,
+   "title": "Global Topbar search deep-links to /kanban?q=",
+   "impact": 3,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 6,
+   "title": "Login render-phase redirect to Navigate/useEffect",
+   "impact": 2,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 7,
+   "title": "React error boundary in App",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 8,
+   "title": "OpenAPI docs expansion (stats/notifications/export/projects/:id)",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 9,
+   "title": "dependabot.yml + npm audit in CI",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 10,
+   "title": "Accessibility pass (labels, aria, focus-visible, skip link, contrast)",
+   "impact": 4,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 11,
+   "title": "Kanban drag-and-drop",
+   "impact": 5,
+   "effort": 4,
+   "risk": 2,
+   "status": "queued"
+  },
+  {
+   "id": 12,
+   "title": "Functional command palette (Cmd+K)",
+   "impact": 4,
+   "effort": 3,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 13,
+   "title": "Playwright E2E in CI",
+   "impact": 4,
+   "effort": 3,
+   "risk": 2,
+   "status": "queued"
+  },
+  {
+   "id": 14,
+   "title": "Failed-login audit logging (401s with IP, no PII)",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 15,
+   "title": "API gzip compression",
+   "impact": 2,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  }
+ ],
+ "done": [
+  "v1-v6: monorepo scaffold, auth, tasks, realtime, branding, hardening",
+  "cycle 1: strict auth limiter (10/10min) + trust proxy + 429 test"
+ ]
+}

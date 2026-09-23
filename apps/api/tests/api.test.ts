@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app.js';
+import { authLimiter } from '../src/middleware/rateLimit.js';
 
 const app = createApp();
 
@@ -57,6 +58,19 @@ describe('tasks', () => {
     expect(p1.body.tasks.length).toBeLessThanOrEqual(2);
     const stats = await request(app).get('/api/tasks/stats').set('Authorization', `Bearer ${token}`);
     expect(stats.body.total).toBe(stats.body.byStatus.todo + stats.body.byStatus.doing + stats.body.byStatus.done);
+  });
+});
+
+describe('auth brute-force guard', () => {
+  it('returns 429 after 10 rapid attempts', async () => {
+    authLimiter.reset();
+    let last = 0;
+    for (let i = 0; i < 11; i++) {
+      const r = await request(app).post('/api/auth/login').send({ email: 'demo@pulseflow.io', password: 'wrongpass' });
+      last = r.status;
+    }
+    expect(last).toBe(429);
+    authLimiter.reset();
   });
 });
 
