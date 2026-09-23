@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+:root {
+  --pf-primary: #6C5CFF;
+  --pf-accent: #00E5CC;
+  --pf-ink: #0B0B14;
+}
+html.dark body { background: #0B0B14; color: #fff; }
+body { font-family: Inter, system-ui, sans-serif; }
+.pf-card { border-radius: 1rem; border: 1px solid rgba(255,255,255,0.08); }
+.pf-gradient-text {
+  background: linear-gradient(90deg, #6C5CFF, #00E5CC);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}

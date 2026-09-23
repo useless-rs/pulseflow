@@ -1,0 +1,21 @@
+{
+  "name": "PulseFlow",
+  "tagline": "Ride the pulse of your work.",
+  "colors": {
+    "primary": "#6C5CFF",
+    "accent": "#00E5CC",
+    "ink": "#0B0B14",
+    "paper": "#FFFFFF",
+    "muted": "#9AA0B2",
+    "danger": "#FF5C7A",
+    "warning": "#FFC94D",
+    "success": "#22C55E"
+  },
+  "fonts": {
+    "display": "Space Grotesk",
+    "body": "Inter"
+  },
+  "voice": "fast, calm, precise. No hype.",
+  "logo": "branding/logo.svg",
+  "banner": "branding/banner.svg"
+}

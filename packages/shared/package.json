@@ -1,0 +1,12 @@
+{
+  "name": "@pulseflow/shared",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": { "zod": "^3.24.1" },
+  "devDependencies": { "typescript": "^5.7.3", "vitest": "^2.1.8" }
+}
