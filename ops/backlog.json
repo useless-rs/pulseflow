@@ -200,7 +200,7 @@
    "impact": 4,
    "effort": 3,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 26,
@@ -244,6 +244,7 @@
    "cycle 21: due dates (API field + pills + drawer editor)",
    "cycle 22: board activity log endpoint (append-only, actor-stamped)",
    "cycle 23: presence over WS (join/leave/count + Topbar badge)",
-   "cycle 24: functional New-task composer (API create + local fallback)"
+   "cycle 24: functional New-task composer (API create + local fallback)",
+   "cycle 25: calendar view with due-date tasks (month grid, overdue red)"
   ]
 }

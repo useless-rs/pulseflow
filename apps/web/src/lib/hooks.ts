@@ -1,9 +1,19 @@
 import { useState } from 'react';
 
+export interface LocalTask {
+  id: string;
+  title: string;
+  status: string;
+  tag: string;
+  description: string;
+  tags: string[];
+  dueDate?: string;
+}
+
 const daysFromNow = (n: number) => new Date(Date.now() + n * 864e5).toISOString();
 
 export function useLocalTasks() {
-  const [tasks, setTasks] = useState([
+  const [tasks, setTasks] = useState<LocalTask[]>([
     { id: '1', title: 'Design logo system', status: 'done', tag: 'brand', description: 'Refined pulse mark, mono/favicon/OG family, @theme tokens.', tags: ['brand'] },
     { id: '2', title: 'Build Express API', status: 'doing', tag: 'backend', description: 'Layered Express API with auth, validation, and realtime.', tags: ['backend'], dueDate: daysFromNow(2) },
     { id: '3', title: 'Ship Kanban UI', status: 'doing', tag: 'frontend', description: 'Board, drag-and-drop, filters, and live sync.', tags: ['frontend'], dueDate: daysFromNow(4) },

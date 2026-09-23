@@ -65,3 +65,11 @@ test('composer creates a task on the board', async ({ page }) => {
   await page.getByRole('button', { name: /^add$/i }).click();
   await expect(page.getByTestId('col-todo').getByText('Cycle 24 e2e task')).toBeVisible();
 });
+
+test('calendar shows tasks on their due dates', async ({ page }) => {
+  await page.goto('/calendar');
+  await expect(page.getByTestId('cal-cell')).toHaveCount(42);
+  await expect(page.getByText('Write README that gets stars').first()).toBeVisible();
+  await page.getByRole('button', { name: /next month/i }).click();
+  await expect(page.getByTestId('cal-cell')).toHaveCount(42);
+});
