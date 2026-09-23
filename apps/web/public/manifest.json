@@ -1,1 +1,1 @@
-{"name": "PulseFlow", "short_name": "PulseFlow", "start_url": "/", "display": "standalone", "background_color": "#0B0B14", "theme_color": "#6C5CFF", "icons": [{"src": "/logo.svg", "sizes": "any", "type": "image/svg+xml"}]}
+{"name": "PulseFlow — Ride the pulse of your work","short_name": "PulseFlow","start_url": "/","display": "standalone","background_color": "#0B0B14","theme_color": "#0B0B14","icons": [{"src": "/favicon.svg","sizes": "any","type": "image/svg+xml","purpose": "any"},{"src": "/logo.svg","sizes": "512x512","type": "image/svg+xml","purpose": "maskable"}]}

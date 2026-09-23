@@ -1,11 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320">
-  <rect width="1200" height="320" fill="#0B0B14"/>
-  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#6C5CFF"/><stop offset="1" stop-color="#00E5CC"/>
-  </linearGradient></defs>
-  <rect x="40" y="40" width="1120" height="240" rx="24" fill="none" stroke="url(#bg)" stroke-width="3" opacity="0.6"/>
-  <text x="80" y="150" font-family="Inter, Arial" font-size="64" font-weight="800" fill="white">PulseFlow</text>
-  <text x="80" y="200" font-family="Inter, Arial" font-size="26" fill="#9AA0B2">Dashboard · Kanban · Analytics · Realtime</text>
-  <circle cx="1020" cy="160" r="54" fill="none" stroke="url(#bg)" stroke-width="10"/>
-  <path d="M990 160 L1010 180 L1055 130" fill="none" stroke="#00E5CC" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="PulseFlow banner">
+<defs>
+<linearGradient id="bbGrad" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#6C5CFF"/><stop offset="1" stop-color="#00E5CC"/>
+</linearGradient>
+<linearGradient id="bbWord" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#00E5CC"/>
+</linearGradient>
+</defs>
+<rect width="1200" height="320" fill="#0B0B14"/>
+<path d="M0 250 H380 L430 120 L490 300 L550 170 H1200" fill="none" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="3"/>
+<rect x="40" y="40" width="1120" height="240" rx="28" fill="none" stroke="url(#bbGrad)" stroke-width="2" stroke-opacity="0.5"/>
+<g transform="translate(96,104)">
+<rect width="112" height="112" rx="26" fill="#14141F"/>
+<path d="M21 63 H47 L56 38 L65 77 L74 52 H84" fill="none" stroke="url(#bbGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="93" cy="63" r="4.5" fill="#00E5CC"/>
+</g>
+<text x="240" y="168" font-family="'Space Grotesk', Inter, Arial, sans-serif" font-size="64" font-weight="700" fill="#FFFFFF" letter-spacing="-1">Pulse<tspan fill="url(#bbWord)">Flow</tspan></text>
+<text x="242" y="208" font-family="Inter, Arial, sans-serif" font-size="24" fill="#9AA0B2">Ride the pulse of your work — dashboard · kanban · realtime</text>
+<g font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600">
+<rect x="920" y="132" width="150" height="56" rx="28" fill="url(#bbGrad)"/>
+<text x="955" y="167" fill="#0B0B14">⚡ v1.0</text>
+</g>
+<circle cx="920" cy="230" r="6" fill="#22C55E"/>
+<text x="936" y="236" font-family="Inter, Arial" font-size="18" fill="#9AA0B2">CI green · live</text>
 </svg>

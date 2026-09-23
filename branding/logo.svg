@@ -1,12 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#6C5CFF"/>
-      <stop offset="1" stop-color="#00E5CC"/>
-    </linearGradient>
-  </defs>
-  <rect width="240" height="240" rx="56" fill="#0B0B14"/>
-  <path d="M70 150 L110 60 L130 100 L150 70 L170 150 Z" fill="none" stroke="url(#g)" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
-  <circle cx="110" cy="165" r="10" fill="#00E5CC"/>
-  <circle cx="150" cy="165" r="10" fill="#6C5CFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="pfTitle pfDesc">
+<title id="pfTitle">PulseFlow</title>
+<desc id="pfDesc">Heartbeat pulse line with signal dot inside a dark squircle</desc>
+<defs>
+<linearGradient id="pfGrad" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#6C5CFF"/>
+<stop offset="1" stop-color="#00E5CC"/>
+</linearGradient>
+</defs>
+<rect width="512" height="512" rx="120" fill="#0B0B14"/>
+<rect x="14" y="14" width="484" height="484" rx="110" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="2"/>
+<path d="M96 288 H216 L256 176 L296 352 L336 240 H384" fill="none" stroke="url(#pfGrad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="424" cy="288" r="20" fill="#00E5CC"/>
 </svg>

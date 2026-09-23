@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PulseFlow favicon">
+<style>@media (prefers-color-scheme: light) { .bg { fill: #0B0B14; } } @media (prefers-color-scheme: dark) { .bg { fill: #1A1A2E; } }</style>
+<defs>
+<linearGradient id="pfFav" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#6C5CFF"/>
+<stop offset="1" stop-color="#00E5CC"/>
+</linearGradient>
+</defs>
+<rect class="bg" width="64" height="64" rx="14" fill="#0B0B14"/>
+<path d="M10 34 H26 L30 22 L35 44 L40 28 H48" fill="none" stroke="url(#pfFav)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="53" cy="34" r="3.5" fill="#00E5CC"/>
+</svg>

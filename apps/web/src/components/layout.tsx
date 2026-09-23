@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { LogoLockup } from './Logo';
 
 const links = [
   ['/', 'Dashboard'],
@@ -12,19 +13,15 @@ export function Sidebar() {
   const loc = useLocation();
   return (
     <aside className="w-60 shrink-0 border-r border-white/10 p-5 hidden md:flex flex-col gap-1">
-      <div className="flex items-center gap-2 mb-6">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6C5CFF] to-[#00E5CC]" />
-        <div>
-          <div className="font-extrabold">PulseFlow</div>
-          <div className="text-xs text-white/50">ride the pulse</div>
-        </div>
+      <div className="mb-6">
+        <LogoLockup />
       </div>
       {links.map(([to, label]) => (
         <Link key={to} to={to} className={`px-3 py-2 rounded-lg text-sm ${loc.pathname === to ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5'}`}>
           {label}
         </Link>
       ))}
-      <div className="mt-auto text-xs text-white/40">v1.0 · realtime ●</div>
+      <div className="mt-auto text-xs text-white/40">v2.0 · realtime ●</div>
     </aside>
   );
 }

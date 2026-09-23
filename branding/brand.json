@@ -1,21 +1,56 @@
 {
   "name": "PulseFlow",
   "tagline": "Ride the pulse of your work.",
+  "version": "2.0.0",
   "colors": {
-    "primary": "#6C5CFF",
-    "accent": "#00E5CC",
-    "ink": "#0B0B14",
+    "primary": {
+      "50": "#EEEDFF",
+      "100": "#D9D6FF",
+      "300": "#A79DFF",
+      "500": "#6C5CFF",
+      "700": "#4A3FD1",
+      "900": "#241F6B"
+    },
+    "accent": {
+      "100": "#C9FFF7",
+      "300": "#5CF2DC",
+      "500": "#00E5CC",
+      "700": "#00A894"
+    },
+    "ink": {
+      "DEFAULT": "#0B0B14",
+      "soft": "#14141F",
+      "line": "rgba(255,255,255,0.08)"
+    },
     "paper": "#FFFFFF",
     "muted": "#9AA0B2",
-    "danger": "#FF5C7A",
-    "warning": "#FFC94D",
-    "success": "#22C55E"
+    "semantic": {
+      "danger": "#FF5C7A",
+      "warning": "#FFC94D",
+      "success": "#22C55E"
+    }
+  },
+  "gradient": {
+    "brand": "linear-gradient(135deg, #6C5CFF 0%, #00E5CC 100%)",
+    "angle": 135,
+    "stops": ["#6C5CFF", "#00E5CC"]
   },
   "fonts": {
     "display": "Space Grotesk",
-    "body": "Inter"
+    "body": "Inter",
+    "mono": "JetBrains Mono"
   },
-  "voice": "fast, calm, precise. No hype.",
-  "logo": "branding/logo.svg",
-  "banner": "branding/banner.svg"
+  "logo": {
+    "primary": "branding/logo.svg",
+    "monoWhite": "branding/logo-mono-white.svg",
+    "monoBlack": "branding/logo-mono-black.svg",
+    "favicon": "branding/favicon.svg",
+    "clearspace": "height of signal dot on all sides",
+    "minSize": "16px favicon / 24px UI"
+  },
+  "voice": "fast, calm, precise. No hype. Verbs over adjectives.",
+  "assets": {
+    "banner": "branding/banner.svg",
+    "social": "branding/social.svg"
+  }
 }
