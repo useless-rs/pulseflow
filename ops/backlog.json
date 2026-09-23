@@ -304,7 +304,7 @@
    "impact": 3,
    "effort": 3,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   }
  ],
  "done": [
@@ -344,6 +344,7 @@
    "cycle 33: sidebar unread notification badge",
    "cycle 34: overdue digest on Dashboard (count + link)",
    "cycle 35: keyboard shortcuts help overlay (Shift+?)",
-   "cycle 36: mobile nav parity (all 7 routes + e2e)"
+   "cycle 36: mobile nav parity (all 7 routes + e2e)",
+   "cycle 37: task priorities with badge colors (API + cards + drawer)"
   ]
 }

@@ -69,6 +69,15 @@ describe('tasks', () => {
     const bad = await request(app).post('/api/tasks').set('Authorization', `Bearer ${token}`).send({ title: 'Bad date', projectId: 'p_pulse', dueDate: 'tomorrow-ish' });
     expect(bad.status).toBe(422);
   });
+  it('accepts priorities, rejects unknown levels', async () => {
+    const login = await request(app).post('/api/auth/login').send({ email: 'demo@pulseflow.io', password: 'password123' });
+    const token = login.body.token;
+    const ok = await request(app).post('/api/tasks').set('Authorization', `Bearer ${token}`).send({ title: 'Urgent work', projectId: 'p_pulse', priority: 'high' });
+    expect(ok.status).toBe(201);
+    expect(ok.body.priority).toBe('high');
+    const bad = await request(app).post('/api/tasks').set('Authorization', `Bearer ${token}`).send({ title: 'Weird level', projectId: 'p_pulse', priority: 'critical' });
+    expect(bad.status).toBe(422);
+  });
 });
 
 describe('auth brute-force guard', () => {

@@ -22,6 +22,17 @@ interface Task {
   tags: string[];
   dueDate?: string;
   projectId?: string;
+  priority?: 'low' | 'medium' | 'high';
+}
+
+function PriorityBadge({ priority }: { priority?: string }) {
+  if (!priority) return null;
+  const style = priority === 'high'
+    ? 'bg-[#FF5C7A]/15 text-[#FF5C7A] font-semibold'
+    : priority === 'medium'
+      ? 'bg-[#FFC94D]/15 text-[#FFC94D]'
+      : 'bg-white/10 text-white/60';
+  return <span className={`text-[11px] px-2 py-0.5 rounded-full ${style}`}>{priority}</span>;
 }
 
 function DuePill({ dueDate }: { dueDate?: string }) {
@@ -48,6 +59,7 @@ function DraggableCard({ task, onMove, onOpen }: { task: Task; onMove: (id: stri
         </div>
         <div className="mt-2 flex gap-1.5 items-center flex-wrap">
           <Badge>{task.tag}</Badge>
+          <PriorityBadge priority={task.priority} />
           <DuePill dueDate={task.dueDate} />
           <div className="ml-auto flex gap-1">
             {cols.filter(([k]) => k !== task.status).map(([k, l]) => (
@@ -104,7 +116,7 @@ export function Kanban() {
     if (!isAuthed()) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId, priority: t.priority })));
         setLive(true);
       })
       .catch(() => {});
@@ -124,7 +136,7 @@ export function Kanban() {
     if (type === 'hello' || !type.startsWith('task.')) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId, priority: t.priority })));
         setSyncedAt(new Date().toISOString());
       })
       .catch(() => {});

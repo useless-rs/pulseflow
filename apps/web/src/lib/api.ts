@@ -22,6 +22,7 @@ export interface TaskDto {
   projectId: string;
   tags: string[];
   dueDate?: string;
+  priority?: 'low' | 'medium' | 'high';
 }
 
 async function req<T>(path: string, opts: RequestInit = {}): Promise<T> {

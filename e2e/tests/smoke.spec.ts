@@ -21,6 +21,7 @@ test('kanban ?q= deep link filters tasks', async ({ page }) => {
   await expect(page.getByText('WIP 2/2')).toBeVisible();
   await page.goto('/kanban');
   await expect(page.getByText(/overdue/i).first()).toBeVisible();
+  await expect(page.getByText('high', { exact: true }).first()).toBeVisible();
 });
 
 test('kanban card drags between columns', async ({ page }) => {

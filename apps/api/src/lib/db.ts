@@ -1,7 +1,8 @@
 export type TaskStatus = 'todo' | 'doing' | 'done';
 export interface User { id: string; name: string; email: string; passwordHash: string; role: 'admin' | 'user'; createdAt: string; }
 export interface Project { id: string; name: string; description: string; ownerId: string; createdAt: string; }
-export interface Task { id: string; title: string; description: string; status: TaskStatus; projectId: string; assigneeId?: string; tags: string[]; dueDate?: string; createdAt: string; updatedAt: string; }
+export type TaskPriority = 'low' | 'medium' | 'high';
+export interface Task { id: string; title: string; description: string; status: TaskStatus; projectId: string; assigneeId?: string; tags: string[]; dueDate?: string; priority?: TaskPriority; createdAt: string; updatedAt: string; }
 
 import { randomUUID } from 'crypto';
 
@@ -23,15 +24,15 @@ export function seed() {
   const p1: Project = { id: 'p_pulse', name: 'PulseFlow Launch', description: 'Ship v1', ownerId: demoId, createdAt: now() };
   const p2: Project = { id: 'p_growth', name: 'Growth', description: 'Stars + docs', ownerId: demoId, createdAt: now() };
   db.projects.push(p1, p2);
-  const seedTasks: Array<[string, TaskStatus, string, number?]> = [
-    ['Design logo system', 'done', p1.id],
-    ['Build Express API', 'doing', p1.id, 2],
-    ['Ship Kanban UI', 'doing', p1.id, 4],
-    ['Write README that gets stars', 'todo', p2.id, -1],
-    ['Add realtime WS hub', 'todo', p1.id, 7],
-    ['Docker + CI gates', 'todo', p2.id],
+  const seedTasks: Array<[string, TaskStatus, string, number?, TaskPriority?]> = [
+    ['Design logo system', 'done', p1.id, undefined, 'low'],
+    ['Build Express API', 'doing', p1.id, 2, 'high'],
+    ['Ship Kanban UI', 'doing', p1.id, 4, 'high'],
+    ['Write README that gets stars', 'todo', p2.id, -1, 'medium'],
+    ['Add realtime WS hub', 'todo', p1.id, 7, 'medium'],
+    ['Docker + CI gates', 'todo', p2.id, undefined, 'low'],
   ];
-  seedTasks.forEach(([title, status, projectId, dueIn], i) => {
-    db.tasks.push({ id: uid('t'), title, description: `${title} — auto-seeded`, status, projectId, tags: i % 2 ? ['frontend'] : ['backend'], dueDate: dueIn === undefined ? undefined : daysFromNow(dueIn), createdAt: now(), updatedAt: now() });
+  seedTasks.forEach(([title, status, projectId, dueIn, priority], i) => {
+    db.tasks.push({ id: uid('t'), title, description: `${title} — auto-seeded`, status, projectId, tags: i % 2 ? ['frontend'] : ['backend'], dueDate: dueIn === undefined ? undefined : daysFromNow(dueIn), priority, createdAt: now(), updatedAt: now() });
   });
 }

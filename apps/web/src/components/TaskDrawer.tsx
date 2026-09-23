@@ -7,6 +7,7 @@ export interface DrawerTask {
   status: string;
   tags: string[];
   dueDate?: string;
+  priority?: 'low' | 'medium' | 'high';
 }
 
 export interface TaskPatch {
@@ -15,6 +16,7 @@ export interface TaskPatch {
   tags: string[];
   status: 'todo' | 'doing' | 'done';
   dueDate?: string;
+  priority?: 'low' | 'medium' | 'high';
 }
 
 export function TaskDrawer({ task, onClose, onSave, onDelete }: {
@@ -30,6 +32,7 @@ export function TaskDrawer({ task, onClose, onSave, onDelete }: {
     task.status === 'doing' || task.status === 'done' ? task.status : 'todo'
   );
   const [due, setDue] = useState(task.dueDate ? task.dueDate.slice(0, 10) : '');
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>(task.priority ?? 'medium');
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { titleRef.current?.focus(); }, []);
@@ -46,6 +49,7 @@ export function TaskDrawer({ task, onClose, onSave, onDelete }: {
       tags: tags.split(',').map(s => s.trim()).filter(Boolean),
       status,
       dueDate: due ? new Date(`${due}T00:00:00`).toISOString() : undefined,
+      priority,
     });
   };
 
@@ -77,6 +81,14 @@ export function TaskDrawer({ task, onClose, onSave, onDelete }: {
           <div>
             <label className="block text-xs text-white/50 mb-1" htmlFor="drawer-tags">Tags (comma separated)</label>
             <input id="drawer-tags" value={tags} onChange={e => setTags(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label className="block text-xs text-white/50 mb-1" htmlFor="drawer-priority">Priority</label>
+            <select id="drawer-priority" value={priority} onChange={e => setPriority(e.target.value as 'low' | 'medium' | 'high')} className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
           </div>
         </div>
         <div className="mb-5">
