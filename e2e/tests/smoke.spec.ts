@@ -18,6 +18,7 @@ test('kanban ?q= deep link filters tasks', async ({ page }) => {
   await page.goto('/kanban?q=kanban');
   await expect(page.getByText('Ship Kanban UI')).toBeVisible();
   await expect(page.getByText('Design logo system')).toHaveCount(0);
+  await expect(page.getByText('WIP 2/2')).toBeVisible();
 });
 
 test('kanban card drags between columns', async ({ page }) => {

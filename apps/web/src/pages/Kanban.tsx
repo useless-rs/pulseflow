@@ -9,6 +9,7 @@ import { useRealtime } from '../lib/realtime';
 
 const cols = [['todo', 'To Do'], ['doing', 'Doing'], ['done', 'Done']];
 const STATUSES = ['todo', 'doing', 'done'];
+const WIP_LIMITS: Record<string, number> = { todo: 5, doing: 2 };
 
 interface Task {
   id: string;
@@ -36,13 +37,21 @@ function DraggableCard({ task, onMove }: { task: Task; onMove: (id: string, stat
   );
 }
 
-function DroppableColumn({ status, label, tasks, onMove }: { status: string; label: string; tasks: Task[]; onMove: (id: string, status: string) => void }) {
+function DroppableColumn({ status, label, tasks, total, limit, onMove }: { status: string; label: string; tasks: Task[]; total: number; limit?: number; onMove: (id: string, status: string) => void }) {
   const { ref } = useDroppable({ id: status });
+  const over = typeof limit === 'number' && total > limit;
   return (
-    <div ref={ref} data-testid={`col-${status}`} className="bg-white/[0.02] rounded-2xl p-3 border border-white/5 min-h-40">
+    <div ref={ref} data-testid={`col-${status}`} className={`bg-white/[0.02] rounded-2xl p-3 border min-h-40 ${over ? 'border-[#FF5C7A]/60' : 'border-white/5'}`}>
       <div className="flex items-center justify-between px-1 pb-2">
         <span className="font-semibold">{label}</span>
-        <Badge>{tasks.length}</Badge>
+        <div className="flex items-center gap-2">
+          {typeof limit === 'number' && (
+            <span className={`text-[11px] ${over ? 'text-[#FF5C7A] font-semibold' : 'text-white/40'}`}>
+              WIP {total}/{limit}{over ? ' — over' : ''}
+            </span>
+          )}
+          <Badge>{tasks.length}</Badge>
+        </div>
       </div>
       <div className="space-y-2">
         {tasks.map(t => <DraggableCard key={t.id} task={t} onMove={onMove} />)}
@@ -116,7 +125,7 @@ export function Kanban() {
       }}>
         <div className="grid md:grid-cols-3 gap-4">
           {cols.map(([key, label]) => (
-            <DroppableColumn key={key} status={key} label={label} tasks={visible.filter(t => t.status === key)} onMove={moveTask} />
+            <DroppableColumn key={key} status={key} label={label} tasks={visible.filter(t => t.status === key)} total={tasks.filter(t => t.status === key).length} limit={WIP_LIMITS[key]} onMove={moveTask} />
           ))}
         </div>
       </DragDropProvider>

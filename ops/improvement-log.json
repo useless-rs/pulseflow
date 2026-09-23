@@ -206,6 +206,18 @@
     "two-client Playwright sync spec covers login, move, and cross-client update"
    ],
    "validate": "web typecheck + build green; two-client websocket sync spec green"
+  },
+  {
+   "n": 19,
+   "date": "2026-09-23",
+   "pick": "WIP limits on columns (soft warning)",
+   "why": "Boards without WIP signals let work pile up silently; research favors visual warnings over hard blocks.",
+   "changes": [
+    "WIP_LIMITS todo 5 / doing 2, done uncapped; header shows n/limit with red over-state",
+    "WIP counts use unfiltered totals so ?q= filters never lie",
+    "e2e asserts WIP 2/2 on seeded board"
+   ],
+   "validate": "web typecheck + build green; kanban e2e slice 2/2 green"
   }
  ]
 }
