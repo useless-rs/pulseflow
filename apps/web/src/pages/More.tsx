@@ -1,11 +1,27 @@
+import { useEffect, useState } from 'react';
 import { Topbar } from '../components/layout';
-import { Card } from '../components/ui';
+import { Card, Badge } from '../components/ui';
+import { api, isAuthed } from '../lib/api';
 
 export function Analytics() {
   const bars = [40, 65, 50, 80, 62, 90, 74];
+  const [live, setLive] = useState<{ total: number; byStatus: Record<string, number> } | null>(null);
+  useEffect(() => {
+    if (isAuthed()) api.taskStats().then(setLive).catch(() => {});
+  }, []);
   return (
     <div>
       <Topbar title="Analytics" />
+      {live && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          {[['Total', live.total], ['To Do', live.byStatus.todo ?? 0], ['Doing', live.byStatus.doing ?? 0], ['Done', live.byStatus.done ?? 0]].map(([k, v]) => (
+            <Card key={k as string}>
+              <div className="text-xs text-white/50 flex gap-2 items-center">{k} <Badge>live</Badge></div>
+              <div className="text-2xl font-extrabold mt-1">{v}</div>
+            </Card>
+          ))}
+        </div>
+      )}
       <div className="grid lg:grid-cols-2 gap-4">
         <Card>
           <div className="font-semibold mb-3">Throughput by day</div>
@@ -44,23 +60,30 @@ export function Settings() {
   );
 }
 
-export function Login() {
+export function Notifications() {
+  const [items, setItems] = useState<Array<{ id: string; text: string; read: boolean; at: string }>>([]);
+  useEffect(() => {
+    if (isAuthed()) api.notifications().then(r => setItems(r.notifications)).catch(() => {});
+  }, []);
+  const mark = async (id: string) => {
+    await api.markRead(id).catch(() => {});
+    setItems(prev => prev.map(n => (n.id === id ? { ...n, read: true } : n)));
+  };
   return (
-    <div className="max-w-sm mx-auto mt-16">
-      <Card>
-        <div className="text-2xl font-extrabold">Welcome back <span className="pf-gradient-text">to PulseFlow</span></div>
-        <div className="text-sm text-white/50 mt-1">demo@pulseflow.io / password123</div>
-        <input id="email" defaultValue="demo@pulseflow.io" className="mt-4 w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm" />
-        <input id="pw" type="password" defaultValue="password123" className="mt-2 w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm" />
-        <button onClick={async () => {
-          const email = (document.getElementById('email') as HTMLInputElement).value;
-          const password = (document.getElementById('pw') as HTMLInputElement).value;
-          const r = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-          const j = await r.json();
-          if (j.token) { localStorage.setItem('pf_token', j.token); location.href = '/'; }
-          else alert('Login failed');
-        }} className="mt-3 w-full py-2 rounded-xl font-semibold bg-gradient-to-r from-[#6C5CFF] to-[#00E5CC] text-black">Sign in</button>
-      </Card>
+    <div>
+      <Topbar title="Notifications" />
+      <div className="space-y-2">
+        {items.length === 0 && <Card><div className="text-sm text-white/50">{isAuthed() ? 'No notifications yet.' : 'Sign in to see notifications.'}</div></Card>}
+        {items.map(n => (
+          <Card key={n.id}>
+            <div className="flex items-center gap-3">
+              {!n.read && <span className="w-2 h-2 rounded-full bg-[#00E5CC]" />}
+              <div className="text-sm flex-1">{n.text}</div>
+              {!n.read && <button onClick={() => mark(n.id)} className="text-xs px-2 py-1 rounded-full border border-white/10 hover:bg-white/10">mark read</button>}
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

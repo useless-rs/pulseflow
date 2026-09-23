@@ -10,10 +10,12 @@ import { docsRouter } from './modules/docs.js';
 import { notificationsRouter } from './modules/notifications.js';
 import { exportRouter } from './modules/export.js';
 import { rateLimit } from './middleware/rateLimit.js';
+import { requestId } from './middleware/requestId.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 export function createApp() {
   const app = express();
+  app.use(requestId);
   app.use(helmet());
   app.use(cors({ origin: env.ALLOWED_ORIGINS, credentials: true }));
   app.use(express.json({ limit: '1mb' }));

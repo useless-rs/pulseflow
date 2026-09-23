@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Sidebar } from './components/layout';
 import { Dashboard } from './pages/Dashboard';
 import { Kanban } from './pages/Kanban';
-import { Analytics, Calendar, Settings, Login } from './pages/More';
+import { Analytics, Calendar, Settings, Notifications } from './pages/More';
+import { Login } from './pages/Login';
 import { NotFound } from './pages/NotFound';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/notifications" element={<Notifications />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

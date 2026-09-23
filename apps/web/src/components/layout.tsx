@@ -6,6 +6,7 @@ const links = [
   ['/kanban', 'Kanban'],
   ['/analytics', 'Analytics'],
   ['/calendar', 'Calendar'],
+  ['/notifications', 'Notifications'],
   ['/settings', 'Settings'],
 ];
 

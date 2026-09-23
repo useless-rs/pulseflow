@@ -4,6 +4,13 @@ const hits = new Map<string, { count: number; reset: number }>();
 const WINDOW = 60_000;
 const LIMIT = 100;
 
+// Evict expired buckets so the map can't grow unbounded (IPs churn).
+const sweeper = setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of hits) if (now > v.reset) hits.delete(k);
+}, WINDOW);
+sweeper.unref?.();
+
 export function rateLimit(req: Request, res: Response, next: NextFunction): void {
   const key = (req.ip ?? 'anon') as string;
   const now = Date.now();
