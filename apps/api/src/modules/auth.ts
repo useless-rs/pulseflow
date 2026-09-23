@@ -20,7 +20,16 @@ authRouter.post('/register', validate(registerSchema), async (req, res) => {
 authRouter.post('/login', validate(loginSchema), async (req, res) => {
   const { email, password } = req.body;
   const user = db.users.find(u => u.email === email);
-  if (!user || !(await comparePassword(password, user.passwordHash))) { res.status(401).json({ error: 'UNAUTHORIZED' }); return; }
+  if (!user || !(await comparePassword(password, user.passwordHash))) {
+    console.warn(JSON.stringify({
+      event: 'auth.login.failed',
+      email: String(email).replace(/[\r\n]/g, ''),
+      ip: req.ip,
+      at: new Date().toISOString(),
+    }));
+    res.status(401).json({ error: 'UNAUTHORIZED' });
+    return;
+  }
   const token = signToken({ sub: user.id, email, role: user.role });
   res.json({ token, user: { id: user.id, name: user.name, email, role: user.role } });
 });
