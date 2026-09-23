@@ -121,3 +121,13 @@ test('sign out clears the session', async ({ page }) => {
   await expect(page).toHaveURL(/\/login/);
   await expect(page.getByLabel('Email')).toBeVisible();
 });
+
+test('drawer delete removes the card', async ({ page }) => {
+  await page.goto('/kanban');
+  await page.getByRole('button', { name: 'Open details for Docker + CI gates', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: /details for/i })).toBeVisible();
+  page.on('dialog', dialog => void dialog.accept());
+  await page.getByRole('button', { name: /^delete$/i }).click();
+  await expect(page.getByRole('dialog', { name: /details for/i })).toHaveCount(0);
+  await expect(page.getByText('Docker + CI gates')).toHaveCount(0);
+});

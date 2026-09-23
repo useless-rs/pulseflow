@@ -248,7 +248,7 @@
    "impact": 2,
    "effort": 1,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 32,
@@ -290,6 +290,7 @@
    "cycle 27: offline action queue (durable outbox + replay + e2e)",
    "cycle 28: shared flush engine (one replay path for all surfaces)",
    "cycle 29: calendar tasks open the shared TaskDrawer",
-   "cycle 30: sign out clears the session (Settings + e2e)"
+   "cycle 30: sign out clears the session (Settings + e2e)",
+   "cycle 31: drawer delete flow e2e coverage (confirm accept)"
   ]
 }
