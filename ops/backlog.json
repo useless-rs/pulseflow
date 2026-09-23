@@ -225,6 +225,14 @@
    "effort": 1,
    "risk": 1,
    "status": "done"
+  },
+  {
+   "id": 29,
+   "title": "Calendar tasks open the shared TaskDrawer",
+   "impact": 4,
+   "effort": 2,
+   "risk": 1,
+   "status": "done"
   }
  ],
  "done": [
@@ -256,6 +264,7 @@
    "cycle 25: calendar view with due-date tasks (month grid, overdue red)",
    "cycle 26: project filter on board (?project= deep links)",
    "cycle 27: offline action queue (durable outbox + replay + e2e)",
-   "cycle 28: shared flush engine (one replay path for all surfaces)"
+   "cycle 28: shared flush engine (one replay path for all surfaces)",
+   "cycle 29: calendar tasks open the shared TaskDrawer"
   ]
 }

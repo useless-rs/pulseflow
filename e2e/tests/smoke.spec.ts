@@ -99,3 +99,13 @@ test('offline moves queue and replay on reconnect', async ({ page, context }) =>
   await context.setOffline(false);
   await expect(page.getByText(/queued/i)).toHaveCount(0, { timeout: 20000 });
 });
+
+test('calendar task opens the detail drawer', async ({ page }) => {
+  await page.goto('/calendar');
+  await page.getByRole('button', { name: 'Open details for Write README that gets stars', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: /details for/i })).toBeVisible();
+  await page.getByLabel('Title').fill('Write README that gets stars v2');
+  await page.getByRole('button', { name: /save changes/i }).click();
+  await expect(page.getByText('Write README that gets stars v2').first()).toBeVisible();
+  await expect(page.getByRole('dialog', { name: /details for/i })).toHaveCount(0);
+});

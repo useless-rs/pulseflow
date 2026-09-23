@@ -327,6 +327,18 @@
     "Kanban flush delegates to the shared engine (net -18/+23 lines trimmed to single path)"
    ],
    "validate": "web typecheck + build green; 11/11 e2e"
+  },
+  {
+   "n": 29,
+   "date": "2026-09-23",
+   "pick": "Calendar tasks open the shared TaskDrawer",
+   "why": "Calendar chips were a read-only dead end; research says task views should open details in context without leaving the page.",
+   "changes": [
+    "calendar chips are buttons reusing TaskDrawer (view/edit/delete, Esc/backdrop close)",
+    "Calendar save/delete go through the shared flushQueue engine with queued badge",
+    "e2e opens a calendar chip, edits the title, saves, asserts the grid"
+   ],
+   "validate": "web typecheck + build green; 12/12 e2e"
   }
  ]
 }

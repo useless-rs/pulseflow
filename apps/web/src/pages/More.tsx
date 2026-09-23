@@ -3,6 +3,8 @@ import { Topbar } from '../components/layout';
 import { Card, Badge } from '../components/ui';
 import { api, isAuthed } from '../lib/api';
 import { useLocalTasks } from '../lib/hooks';
+import { TaskDrawer, type TaskPatch } from '../components/TaskDrawer';
+import { enqueueOp, flushQueue, loadQueue, isNetworkError } from '../lib/offlineQueue';
 
 function ymd(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -53,12 +55,54 @@ export function Calendar() {
     const n = new Date();
     return { y: n.getFullYear(), m: n.getMonth() };
   });
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [queuedCount, setQueuedCount] = useState(() => loadQueue().length);
   useEffect(() => {
     if (!isAuthed()) return;
     api.tasks()
       .then(r => setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate }))))
       .catch(() => {});
   }, [setTasks]);
+
+  const refreshQueued = () => setQueuedCount(loadQueue().length);
+  const flush = async () => {
+    if (!isAuthed()) return;
+    await flushQueue((tid, nid) => setTasks(ts => ts.map(x => (x.id === tid ? { ...x, id: nid } : x))));
+    refreshQueued();
+  };
+  useEffect(() => {
+    refreshQueued();
+    const onOnline = () => { void flush(); };
+    window.addEventListener('online', onOnline);
+    void flush();
+    return () => window.removeEventListener('online', onOnline);
+  }, []);
+
+  const selected = tasks.find(t => t.id === selectedId) ?? null;
+  const saveTask = async (id: string, patch: TaskPatch) => {
+    const prev = tasks.find(t => t.id === id);
+    setTasks(ts => ts.map(t => (t.id === id ? { ...t, ...patch, tag: patch.tags[0] ?? t.tag } : t)));
+    if (isAuthed() && id.startsWith('t_')) {
+      try { await api.patchTask(id, patch); }
+      catch (e) {
+        if (isNetworkError(e)) { enqueueOp({ kind: 'patch', taskId: id, payload: patch }); refreshQueued(); }
+        else if (prev) setTasks(ts => ts.map(t => (t.id === id ? prev : t)));
+      }
+    }
+    setSelectedId(null);
+  };
+  const deleteTask = async (id: string) => {
+    const prev = tasks;
+    setTasks(ts => ts.filter(t => t.id !== id));
+    if (isAuthed() && id.startsWith('t_')) {
+      try { await api.deleteTask(id); }
+      catch (e) {
+        if (isNetworkError(e)) { enqueueOp({ kind: 'delete', taskId: id }); refreshQueued(); }
+        else setTasks(prev);
+      }
+    }
+    setSelectedId(null);
+  };
 
   const first = new Date(cursor.y, cursor.m, 1);
   const cells: Date[] = [];
@@ -83,7 +127,7 @@ export function Calendar() {
       <Card>
         <div className="flex items-center justify-between mb-3">
           <button onClick={() => shift(-1)} aria-label="Previous month" className="px-3 py-1 rounded-lg border border-white/10 hover:bg-white/5">‹</button>
-          <div className="font-semibold">{first.toLocaleString('default', { month: 'long', year: 'numeric' })}</div>
+          <div className="font-semibold">{first.toLocaleString('default', { month: 'long', year: 'numeric' })}{queuedCount > 0 && <button onClick={() => void flush()} title="Retry sync now" className="ml-2 text-xs px-2 py-0.5 rounded-full bg-[#FFC94D]/15 text-[#FFC94D]">● {queuedCount} queued</button>}</div>
           <div className="flex gap-2">
             <button onClick={() => { const n = new Date(); setCursor({ y: n.getFullYear(), m: n.getMonth() }); }} className="px-3 py-1 rounded-lg border border-white/10 text-sm hover:bg-white/5">Today</button>
             <button onClick={() => shift(1)} aria-label="Next month" className="px-3 py-1 rounded-lg border border-white/10 hover:bg-white/5">›</button>
@@ -101,9 +145,9 @@ export function Calendar() {
               <div key={key} data-testid="cal-cell" className={`min-h-16 rounded-lg border p-1 text-left ${!inMonth ? 'opacity-30' : ''} ${key === todayKey ? 'border-[#00E5CC]/60' : 'border-white/5'}`}>
                 <div className="text-[11px] text-white/50">{d.getDate()}</div>
                 {dayTasks.slice(0, 3).map(t => (
-                  <div key={t.id} title={t.title} className={`truncate text-[11px] px-1 py-0.5 rounded mt-0.5 ${key < todayKey && t.status !== 'done' ? 'bg-[#FF5C7A]/15 text-[#FF5C7A] font-semibold' : 'bg-white/5 text-white/75'}`}>
+                  <button key={t.id} onClick={() => setSelectedId(t.id)} aria-label={`Open details for ${t.title}`} title={t.title} className={`block w-full truncate text-left text-[11px] px-1 py-0.5 rounded mt-0.5 ${key < todayKey && t.status !== 'done' ? 'bg-[#FF5C7A]/15 text-[#FF5C7A] font-semibold' : 'bg-white/5 text-white/75 hover:bg-white/10'}`}>
                     {t.title}
-                  </div>
+                  </button>
                 ))}
                 {dayTasks.length > 3 && <div className="text-[10px] text-white/40">+{dayTasks.length - 3} more</div>}
               </div>
@@ -111,6 +155,15 @@ export function Calendar() {
           })}
         </div>
       </Card>
+      {selected && (
+        <TaskDrawer
+          key={selected.id}
+          task={selected}
+          onClose={() => setSelectedId(null)}
+          onSave={(patch) => void saveTask(selected.id, patch)}
+          onDelete={() => void deleteTask(selected.id)}
+        />
+      )}
     </div>
   );
 }
