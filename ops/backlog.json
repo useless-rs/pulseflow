@@ -80,7 +80,7 @@
    "impact": 4,
    "effort": 2,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 11,
@@ -133,6 +133,7 @@
   "cycle 6: Login SPA navigation (Navigate/useNavigate) + a11y labels",
   "cycle 7: ErrorBoundary around routes with retry",
   "cycle 8: OpenAPI expansion (all routes, schemas, security)",
-  "cycle 9: dependabot (npm/actions/docker) + audit check"
+  "cycle 9: dependabot (npm/actions/docker) + audit check",
+  "cycle 10: vuln triage \u2014 vitest 2->4.1.11, vite dedupe to 6.4.3, 0 vulns"
  ]
 }
