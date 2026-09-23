@@ -243,6 +243,18 @@
     "e2e asserts overdue pill on seeded board"
    ],
    "validate": "api build + 11/11; web typecheck + build; 7/7 e2e"
+  },
+  {
+   "n": 22,
+   "date": "2026-09-23",
+   "pick": "Board activity log endpoint (append-only)",
+   "why": "No audit trail of who changed what; Kan-style activity history is a core collaboration expectation.",
+   "changes": [
+    "lib/activity: capped append-only log (200) with actor/taskId/title stamps",
+    "tasks mutations log create/update/delete; GET /api/activity newest-first, OpenAPI documented",
+    "test asserts full lifecycle appears in order with actor email"
+   ],
+   "validate": "api build + 12/12 tests green"
   }
  ]
 }

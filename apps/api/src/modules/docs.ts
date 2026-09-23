@@ -6,6 +6,7 @@ const taskSchema = {
     id: { type: 'string' }, title: { type: 'string' }, description: { type: 'string' },
     status: { type: 'string', enum: ['todo', 'doing', 'done'] }, projectId: { type: 'string' },
     tags: { type: 'array', items: { type: 'string' } },
+    dueDate: { type: 'string', format: 'date-time' },
   },
 };
 
@@ -43,6 +44,7 @@ docsRouter.get('/openapi.json', (_req, res) => {
       '/api/projects/{id}': { get: { summary: 'Project detail with tasks' } },
       '/api/notifications': { get: { summary: 'List notifications' } },
       '/api/export/tasks.csv': { get: { summary: 'Export tasks as CSV' } },
+      '/api/activity': { get: { summary: 'Board activity log (newest first)' } },
     },
   });
 });

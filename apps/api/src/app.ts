@@ -10,6 +10,7 @@ import { projectsRouter } from './modules/projects.js';
 import { docsRouter } from './modules/docs.js';
 import { notificationsRouter } from './modules/notifications.js';
 import { exportRouter } from './modules/export.js';
+import { activityRouter } from './modules/activity.js';
 import { rateLimit, authLimiter } from './middleware/rateLimit.js';
 import { requestId } from './middleware/requestId.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -31,6 +32,7 @@ export function createApp() {
   app.use('/api/projects', projectsRouter);
   app.use('/api/notifications', notificationsRouter);
   app.use('/api/export', exportRouter);
+  app.use('/api/activity', activityRouter);
   app.use(notFound);
   app.use(errorHandler);
   return app;

@@ -104,4 +104,18 @@ describe('platform', () => {
     expect(p.body.tasks).toBeDefined();
     expect(await request(app).get('/api/projects/nope').set('Authorization', `Bearer ${token}`).then(r => r.status)).toBe(404);
   });
+  it('records task mutations in the activity log', async () => {
+    const login = await request(app).post('/api/auth/login').send({ email: 'demo@pulseflow.io', password: 'password123' });
+    const token = login.body.token;
+    const auth = (r: import('supertest').Test) => r.set('Authorization', `Bearer ${token}`);
+    const created = await auth(request(app).post('/api/tasks').send({ title: 'Logged work', projectId: 'p_pulse' }));
+    expect(created.status).toBe(201);
+    await auth(request(app).patch(`/api/tasks/${created.body.id}`).send({ status: 'doing' }));
+    await auth(request(app).delete(`/api/tasks/${created.body.id}`));
+    const feed = await auth(request(app).get('/api/activity?limit=50'));
+    expect(feed.status).toBe(200);
+    const actions = feed.body.activity.filter((e: { taskId: string }) => e.taskId === created.body.id).map((e: { action: string }) => e.action);
+    expect(actions).toEqual(['task.deleted', 'task.updated', 'task.created']);
+    expect(feed.body.activity[0]).toHaveProperty('actor', 'demo@pulseflow.io');
+  });
 });
