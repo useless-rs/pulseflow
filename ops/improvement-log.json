@@ -27,6 +27,18 @@
     ".dockerignore hardened (nested node_modules/dist, .git, coverage, .env)"
    ],
    "validate": "docker daemon blocked (socket perms); validated by faithful staging: npm ci + workspace build OK, runner npm ci --omit=dev OK, booted dist serves /health + real login + /stats"
+  },
+  {
+   "n": 3,
+   "date": "2026-09-23",
+   "pick": "Fix CI (root npm ci, per-workspace gates)",
+   "why": "CI ran npm ci --workspace (unsupported pattern) twice and never tested shared/ui-kit or typechecks; red CI erodes trust.",
+   "changes": [
+    "ci.yml split into api/web/shared jobs with setup-node npm cache",
+    "single root npm ci then workspace build/test/typecheck gates",
+    "added typecheck script to ui-kit"
+   ],
+   "validate": "YAML parsed; every CI command executed locally green (api 10/10, shared 3/3, web build, all typechecks)"
   }
  ]
 }

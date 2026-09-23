@@ -24,7 +24,7 @@
    "impact": 4,
    "effort": 1,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 4,
@@ -126,6 +126,7 @@
  "done": [
   "v1-v6: monorepo scaffold, auth, tasks, realtime, branding, hardening",
   "cycle 1: strict auth limiter (10/10min) + trust proxy + 429 test",
-  "cycle 2: self-contained Dockerfiles + .dockerignore hardening, validated via staged npm ci/build/boot/smoke (docker daemon unavailable)"
+  "cycle 2: self-contained Dockerfiles + .dockerignore hardening, validated via staged npm ci/build/boot/smoke (docker daemon unavailable)",
+  "cycle 3: CI split into api/web/shared jobs, root npm ci, all gates validated"
  ]
 }

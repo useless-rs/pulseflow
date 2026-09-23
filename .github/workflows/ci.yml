@@ -4,11 +4,32 @@ on:
     branches: [main]
   pull_request:
 jobs:
-  build-test:
+  api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
-      - run: npm ci --workspace=apps/api && npm run build --workspace=apps/api && npm run test --workspace=apps/api
-      - run: npm ci --workspace=apps/web && npm run build --workspace=apps/web
+      - run: npm ci
+      - run: npm run build --workspace=apps/api
+      - run: npm run typecheck --workspace=apps/api
+      - run: npm run test --workspace=apps/api
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run build --workspace=apps/web
+      - run: npm run typecheck --workspace=apps/web
+  shared:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run test --workspace=packages/shared
+      - run: npm run typecheck --workspace=packages/shared
+      - run: npm run typecheck --workspace=packages/ui-kit
