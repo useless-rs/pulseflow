@@ -34,7 +34,9 @@ export function Topbar({ title }: { title: string }) {
     <header className="flex items-center justify-between py-4">
       <h1 className="text-2xl font-bold">{title}</h1>
       <div className="flex items-center gap-3">
-        <input placeholder="⌘K search…" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
+        <a href="/api/export/tasks.csv" className="text-xs px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5">⬇ CSV</a>
+        <span className="text-xs px-2 py-1 rounded-full bg-[#00E5CC]/15 text-[#00E5CC]">● live</span>
+        <input placeholder="⌘K search…" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-44" />
         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#6C5CFF] to-[#00E5CC] grid place-items-center font-bold text-black">D</div>
       </div>
     </header>

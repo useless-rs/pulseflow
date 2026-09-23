@@ -8,6 +8,7 @@ import { tasksRouter } from './modules/tasks.js';
 import { projectsRouter } from './modules/projects.js';
 import { docsRouter } from './modules/docs.js';
 import { notificationsRouter } from './modules/notifications.js';
+import { exportRouter } from './modules/export.js';
 import { rateLimit } from './middleware/rateLimit.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
@@ -24,6 +25,7 @@ export function createApp() {
   app.use('/api/tasks', tasksRouter);
   app.use('/api/projects', projectsRouter);
   app.use('/api/notifications', notificationsRouter);
+  app.use('/api/export', exportRouter);
   app.use(notFound);
   app.use(errorHandler);
   return app;
