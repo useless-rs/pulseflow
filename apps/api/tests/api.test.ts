@@ -59,6 +59,16 @@ describe('tasks', () => {
     const stats = await request(app).get('/api/tasks/stats').set('Authorization', `Bearer ${token}`);
     expect(stats.body.total).toBe(stats.body.byStatus.todo + stats.body.byStatus.doing + stats.body.byStatus.done);
   });
+  it('accepts ISO due dates, rejects garbage', async () => {
+    const login = await request(app).post('/api/auth/login').send({ email: 'demo@pulseflow.io', password: 'password123' });
+    const token = login.body.token;
+    const due = new Date(Date.now() + 864e5).toISOString();
+    const ok = await request(app).post('/api/tasks').set('Authorization', `Bearer ${token}`).send({ title: 'Dated work', projectId: 'p_pulse', dueDate: due });
+    expect(ok.status).toBe(201);
+    expect(ok.body.dueDate).toBe(due);
+    const bad = await request(app).post('/api/tasks').set('Authorization', `Bearer ${token}`).send({ title: 'Bad date', projectId: 'p_pulse', dueDate: 'tomorrow-ish' });
+    expect(bad.status).toBe(422);
+  });
 });
 
 describe('auth brute-force guard', () => {

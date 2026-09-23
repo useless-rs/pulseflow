@@ -21,6 +21,7 @@ export interface TaskDto {
   status: 'todo' | 'doing' | 'done';
   projectId: string;
   tags: string[];
+  dueDate?: string;
 }
 
 async function req<T>(path: string, opts: RequestInit = {}): Promise<T> {

@@ -168,7 +168,7 @@
    "impact": 4,
    "effort": 3,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 22,
@@ -205,9 +205,10 @@
   "cycle 14: route-change focus (h1 first, main fallback)",
   "cycle 15: command palette (Cmd+K, combobox, focus restore)",
   "cycle 16: Playwright E2E (4 browser specs + CI job)",
-   "cycle 17: Kanban drag-and-drop (dnd-kit, API-persisted, e2e-proven)",
-   "cycle 18: Live Kanban sync over WS (full WS payloads, remote refetch, two-client e2e)",
-   "cycle 19: WIP limits on columns (soft warning, done uncapped)",
-   "cycle 20: Task detail drawer (view/edit/delete, drag-grip fix)"
-  ]
+  "cycle 17: Kanban drag-and-drop (dnd-kit, API-persisted, e2e-proven)",
+  "cycle 18: Live Kanban sync over WS (full WS payloads, remote refetch, two-client e2e)",
+  "cycle 19: WIP limits on columns (soft warning, done uncapped)",
+  "cycle 20: Task detail drawer (view/edit/delete, drag-grip fix)",
+  "cycle 21: due dates (API field + pills + drawer editor)"
+ ]
 }

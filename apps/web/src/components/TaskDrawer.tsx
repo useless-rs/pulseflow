@@ -6,6 +6,7 @@ export interface DrawerTask {
   description: string;
   status: string;
   tags: string[];
+  dueDate?: string;
 }
 
 export interface TaskPatch {
@@ -13,6 +14,7 @@ export interface TaskPatch {
   description: string;
   tags: string[];
   status: 'todo' | 'doing' | 'done';
+  dueDate?: string;
 }
 
 export function TaskDrawer({ task, onClose, onSave, onDelete }: {
@@ -27,6 +29,7 @@ export function TaskDrawer({ task, onClose, onSave, onDelete }: {
   const [status, setStatus] = useState<TaskPatch['status']>(
     task.status === 'doing' || task.status === 'done' ? task.status : 'todo'
   );
+  const [due, setDue] = useState(task.dueDate ? task.dueDate.slice(0, 10) : '');
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { titleRef.current?.focus(); }, []);
@@ -42,6 +45,7 @@ export function TaskDrawer({ task, onClose, onSave, onDelete }: {
       description,
       tags: tags.split(',').map(s => s.trim()).filter(Boolean),
       status,
+      dueDate: due ? new Date(`${due}T00:00:00`).toISOString() : undefined,
     });
   };
 
@@ -73,6 +77,13 @@ export function TaskDrawer({ task, onClose, onSave, onDelete }: {
           <div>
             <label className="block text-xs text-white/50 mb-1" htmlFor="drawer-tags">Tags (comma separated)</label>
             <input id="drawer-tags" value={tags} onChange={e => setTags(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm" />
+          </div>
+        </div>
+        <div className="mb-5">
+          <label className="block text-xs text-white/50 mb-1" htmlFor="drawer-due">Due date</label>
+          <div className="flex gap-2">
+            <input id="drawer-due" type="date" value={due} onChange={e => setDue(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm" />
+            {due && <button onClick={() => setDue('')} aria-label="Clear due date" className="px-3 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/5">✕</button>}
           </div>
         </div>
         <div className="flex gap-2">

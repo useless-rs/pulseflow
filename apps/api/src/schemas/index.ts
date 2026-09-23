@@ -5,6 +5,7 @@ export const taskSchema = z.object({
   title: z.string().min(2), description: z.string().default(''),
   status: z.enum(['todo', 'doing', 'done']).default('todo'),
   projectId: z.string().min(1), tags: z.array(z.string()).default([]),
+  dueDate: z.string().datetime().optional(),
 });
 export const projectSchema = z.object({ name: z.string().min(2), description: z.string().default('') });
 export const taskPatchSchema = taskSchema.partial();

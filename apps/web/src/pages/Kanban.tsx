@@ -19,6 +19,20 @@ interface Task {
   tag: string;
   description: string;
   tags: string[];
+  dueDate?: string;
+}
+
+function DuePill({ dueDate }: { dueDate?: string }) {
+  if (!dueDate) return null;
+  const overdue = new Date(dueDate).getTime() < Date.now();
+  const label = overdue
+    ? `overdue ${new Date(dueDate).toLocaleDateString()}`
+    : `due ${new Date(dueDate).toLocaleDateString()}`;
+  return (
+    <span className={`text-[11px] px-2 py-0.5 rounded-full ${overdue ? 'bg-[#FF5C7A]/15 text-[#FF5C7A] font-semibold' : 'bg-white/10 text-white/70'}`}>
+      {label}
+    </span>
+  );
 }
 
 function DraggableCard({ task, onMove, onOpen }: { task: Task; onMove: (id: string, status: string) => void; onOpen: (id: string) => void }) {
@@ -30,8 +44,9 @@ function DraggableCard({ task, onMove, onOpen }: { task: Task; onMove: (id: stri
           <button ref={handleRef} aria-label={`Drag ${task.title} to reorder`} title="Drag to reorder" className="mt-0.5 shrink-0 cursor-grab active:cursor-grabbing text-white/30 hover:text-white/70 text-sm leading-none px-0.5 select-none">⋮⋮</button>
           <button onClick={() => onOpen(task.id)} aria-label={`Open details for ${task.title}`} className="font-medium text-sm text-left hover:text-[#00E5CC] flex-1">{task.title}</button>
         </div>
-        <div className="mt-2 flex gap-1.5 items-center">
+        <div className="mt-2 flex gap-1.5 items-center flex-wrap">
           <Badge>{task.tag}</Badge>
+          <DuePill dueDate={task.dueDate} />
           <div className="ml-auto flex gap-1">
             {cols.filter(([k]) => k !== task.status).map(([k, l]) => (
               <button key={k} onClick={() => onMove(task.id, k)} aria-label={`Move ${task.title} to ${l}`} className="text-[11px] px-2 py-0.5 rounded-full border border-white/10 hover:bg-white/10">→ {l}</button>
@@ -79,7 +94,7 @@ export function Kanban() {
     if (!isAuthed()) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [] })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate })));
         setLive(true);
       })
       .catch(() => {});
@@ -92,7 +107,7 @@ export function Kanban() {
     if (type === 'hello' || !type.startsWith('task.')) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [] })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate })));
         setSyncedAt(new Date().toISOString());
       })
       .catch(() => {});
