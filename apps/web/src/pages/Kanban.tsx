@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Topbar } from '../components/layout';
 import { Card, Badge, Button } from '../components/ui';
 import { useLocalTasks } from '../lib/hooks';
@@ -8,7 +9,8 @@ const cols = [['todo', 'To Do'], ['doing', 'Doing'], ['done', 'Done']];
 
 export function Kanban() {
   const { tasks, move, setTasks } = useLocalTasks();
-  const [filter, setFilter] = useState('');
+  const [params, setParams] = useSearchParams();
+  const filter = params.get('q') ?? '';
   const [live, setLive] = useState(false);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export function Kanban() {
     <div>
       <Topbar title="Kanban" />
       <div className="flex items-center gap-3 mb-3">
-        <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Filter tasks…" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
+        <input value={filter} onChange={e => setParams(e.target.value ? { q: e.target.value } : {}, { replace: true })} placeholder="Filter tasks…" aria-label="Filter tasks" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
         {live && <Badge>live api</Badge>}
       </div>
       <div className="grid md:grid-cols-3 gap-4">

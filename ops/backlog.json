@@ -40,7 +40,7 @@
    "impact": 3,
    "effort": 2,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 6,
@@ -128,6 +128,7 @@
   "cycle 1: strict auth limiter (10/10min) + trust proxy + 429 test",
   "cycle 2: self-contained Dockerfiles + .dockerignore hardening, validated via staged npm ci/build/boot/smoke (docker daemon unavailable)",
   "cycle 3: CI split into api/web/shared jobs, root npm ci, all gates validated",
-  "cycle 4: Dashboard live data (stats KPIs, distribution, activity, explicit states)"
+  "cycle 4: Dashboard live data (stats KPIs, distribution, activity, explicit states)",
+  "cycle 5: global search deep-links to /kanban?q= with Cmd+K focus"
  ]
 }
