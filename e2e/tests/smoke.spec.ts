@@ -73,3 +73,11 @@ test('calendar shows tasks on their due dates', async ({ page }) => {
   await page.getByRole('button', { name: /next month/i }).click();
   await expect(page.getByTestId('cal-cell')).toHaveCount(42);
 });
+
+test('project filter narrows the board', async ({ page }) => {
+  await page.goto('/kanban');
+  await page.getByLabel('Filter by project').selectOption('p_growth');
+  await expect(page.getByText('Write README that gets stars').first()).toBeVisible();
+  await expect(page.getByText('Build Express API')).toHaveCount(0);
+  await expect(page).toHaveURL(/project=p_growth/);
+});

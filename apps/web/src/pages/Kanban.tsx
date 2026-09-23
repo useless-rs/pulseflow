@@ -20,6 +20,7 @@ interface Task {
   description: string;
   tags: string[];
   dueDate?: string;
+  projectId?: string;
 }
 
 function DuePill({ dueDate }: { dueDate?: string }) {
@@ -85,6 +86,11 @@ export function Kanban() {
   const { tasks, move, setTasks } = useLocalTasks();
   const [params, setParams] = useSearchParams();
   const filter = params.get('q') ?? '';
+  const project = params.get('project') ?? '';
+  const [projects, setProjects] = useState<Array<{ id: string; name: string }>>([
+    { id: 'p_pulse', name: 'PulseFlow Launch' },
+    { id: 'p_growth', name: 'Growth' },
+  ]);
   const [live, setLive] = useState(false);
   const [syncedAt, setSyncedAt] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -97,13 +103,14 @@ export function Kanban() {
     if (!isAuthed()) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId })));
         setLive(true);
       })
       .catch(() => {});
     api.projects()
       .then(r => {
-        const first = (r as { projects: Array<{ id: string }> }).projects[0];
+        setProjects(r.projects);
+        const first = r.projects[0];
         if (first) setProjectId(first.id);
       })
       .catch(() => {});
@@ -116,7 +123,7 @@ export function Kanban() {
     if (type === 'hello' || !type.startsWith('task.')) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId })));
         setSyncedAt(new Date().toISOString());
       })
       .catch(() => {});
@@ -137,16 +144,28 @@ export function Kanban() {
     if (live) {
       try {
         const t = await api.createTask({ title, projectId });
-        setTasks(ts => [...ts, { id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate }]);
+        setTasks(ts => [...ts, { id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId }]);
       } catch { return; }
     } else {
-      setTasks(ts => [...ts, { id: `l_${Date.now()}`, title, status: 'todo', tag: 'task', description: '', tags: [] }]);
+      setTasks(ts => [...ts, { id: `l_${Date.now()}`, title, status: 'todo', tag: 'task', description: '', tags: [], projectId: project || 'p_pulse' }]);
     }
     setDraft('');
     setComposing(false);
   };
 
-  const visible = tasks.filter(t => t.title.toLowerCase().includes(filter.toLowerCase()));
+  const setQuery = (next: { q?: string; project?: string }) => {
+    const q = next.q ?? filter;
+    const p = next.project ?? project;
+    const params: Record<string, string> = {};
+    if (q) params.q = q;
+    if (p) params.project = p;
+    setParams(params, { replace: true });
+  };
+
+  const visible = tasks.filter(t =>
+    t.title.toLowerCase().includes(filter.toLowerCase()) &&
+    (!project || t.projectId === project)
+  );
   const selected = tasks.find(t => t.id === selectedId) ?? null;
 
   const saveTask = async (id: string, patch: TaskPatch) => {
@@ -173,7 +192,11 @@ export function Kanban() {
     <div>
       <Topbar title="Kanban" />
       <div className="flex items-center gap-3 mb-3">
-        <input value={filter} onChange={e => setParams(e.target.value ? { q: e.target.value } : {}, { replace: true })} placeholder="Filter tasks…" aria-label="Filter tasks" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
+        <input value={filter} onChange={e => setQuery({ q: e.target.value })} placeholder="Filter tasks…" aria-label="Filter tasks" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
+        <select value={project} onChange={e => setQuery({ project: e.target.value })} aria-label="Filter by project" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm">
+          <option value="">All projects</option>
+          {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
         {live && <Badge>live api</Badge>}
         {syncedAt && <span className="text-xs text-[#00E5CC]">• synced {new Date(syncedAt).toLocaleTimeString()}</span>}
         <span className="text-xs text-white/40">drag cards by the grip</span>
