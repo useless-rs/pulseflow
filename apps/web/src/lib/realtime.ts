@@ -13,7 +13,7 @@ export function useRealtime() {
       } catch { setOnline(false); return; }
       ws.onopen = () => { if (!closed) setOnline(true); };
       ws.onclose = () => { setOnline(false); };
-      ws.onmessage = (e) => setEvents(prev => [String(e.data).slice(0, 120), ...prev].slice(0, 20));
+      ws.onmessage = (e) => setEvents(prev => [String(e.data), ...prev].slice(0, 20));
     };
     connect();
     return () => { closed = true; ws?.close(); };

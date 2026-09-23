@@ -137,6 +137,54 @@
    "effort": 2,
    "risk": 1,
    "status": "done"
+  },
+  {
+   "id": 18,
+   "title": "Live Kanban sync over WS (apply remote task.* events)",
+   "impact": 5,
+   "effort": 3,
+   "risk": 2,
+   "status": "done"
+  },
+  {
+   "id": 19,
+   "title": "Task detail drawer (view/edit on click)",
+   "impact": 4,
+   "effort": 3,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 20,
+   "title": "WIP limits on columns (soft warning)",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 21,
+   "title": "Due dates on tasks (API field + UI)",
+   "impact": 4,
+   "effort": 3,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 22,
+   "title": "Board activity log endpoint (append-only)",
+   "impact": 3,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 23,
+   "title": "Presence (who is online via WS)",
+   "impact": 3,
+   "effort": 3,
+   "risk": 2,
+   "status": "queued"
   }
  ],
  "done": [
@@ -157,6 +205,7 @@
   "cycle 14: route-change focus (h1 first, main fallback)",
   "cycle 15: command palette (Cmd+K, combobox, focus restore)",
   "cycle 16: Playwright E2E (4 browser specs + CI job)",
-  "cycle 17: Kanban drag-and-drop (dnd-kit, API-persisted, e2e-proven)"
- ]
+   "cycle 17: Kanban drag-and-drop (dnd-kit, API-persisted, e2e-proven)",
+   "cycle 18: Live Kanban sync over WS (full WS payloads, remote refetch, two-client e2e)"
+  ]
 }

@@ -5,6 +5,7 @@ import { Topbar } from '../components/layout';
 import { Card, Badge, Button } from '../components/ui';
 import { useLocalTasks } from '../lib/hooks';
 import { api, isAuthed } from '../lib/api';
+import { useRealtime } from '../lib/realtime';
 
 const cols = [['todo', 'To Do'], ['doing', 'Doing'], ['done', 'Done']];
 const STATUSES = ['todo', 'doing', 'done'];
@@ -55,6 +56,8 @@ export function Kanban() {
   const [params, setParams] = useSearchParams();
   const filter = params.get('q') ?? '';
   const [live, setLive] = useState(false);
+  const [syncedAt, setSyncedAt] = useState<string | null>(null);
+  const { events } = useRealtime();
 
   useEffect(() => {
     if (!isAuthed()) return;
@@ -65,6 +68,19 @@ export function Kanban() {
       })
       .catch(() => {});
   }, [setTasks]);
+
+  useEffect(() => {
+    if (!events.length || !isAuthed()) return;
+    let type = '';
+    try { type = (JSON.parse(events[0]).event as string) ?? ''; } catch { return; }
+    if (type === 'hello' || !type.startsWith('task.')) return;
+    api.tasks()
+      .then(r => {
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task' })));
+        setSyncedAt(new Date().toISOString());
+      })
+      .catch(() => {});
+  }, [events, setTasks]);
 
   const moveTask = async (id: string, status: string) => {
     const prev = tasks.find(t => t.id === id)?.status;
@@ -83,6 +99,7 @@ export function Kanban() {
       <div className="flex items-center gap-3 mb-3">
         <input value={filter} onChange={e => setParams(e.target.value ? { q: e.target.value } : {}, { replace: true })} placeholder="Filter tasks…" aria-label="Filter tasks" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
         {live && <Badge>live api</Badge>}
+        {syncedAt && <span className="text-xs text-[#00E5CC]">• synced {new Date(syncedAt).toLocaleTimeString()}</span>}
         <span className="text-xs text-white/40">drag cards between columns</span>
       </div>
       <DragDropProvider onDragEnd={(event) => {

@@ -194,6 +194,18 @@
     "e2e drag test with real mouse path"
    ],
    "validate": "typecheck+build green; 5/5 e2e in Chromium"
+  },
+  {
+   "n": 18,
+   "date": "2026-09-23",
+   "pick": "Live Kanban sync over WS",
+   "why": "Server broadcast worked, but the browser truncated WS payloads to 120 chars, so Kanban could not parse remote task events.",
+   "changes": [
+    "realtime.ts keeps full WS message payloads for the recent-event buffer",
+    "Kanban refetches tasks on remote task.* events and shows sync time",
+    "two-client Playwright sync spec covers login, move, and cross-client update"
+   ],
+   "validate": "web typecheck + build green; two-client websocket sync spec green"
   }
  ]
 }
