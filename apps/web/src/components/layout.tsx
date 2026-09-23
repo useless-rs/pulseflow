@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { LogoLockup } from './Logo';
+import { useRealtime } from '../lib/realtime';
 
 const links = [
   ['/', 'Dashboard'],
@@ -33,6 +34,7 @@ export function Topbar({ title }: { title: string }) {
   const location = useLocation();
   const [q, setQ] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const { onlineCount } = useRealtime();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -58,7 +60,9 @@ export function Topbar({ title }: { title: string }) {
       <h1 className="text-2xl font-bold">{title}</h1>
       <div className="flex items-center gap-3">
         <a href="/api/export/tasks.csv" className="text-xs px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5">⬇ CSV</a>
-        <span className="text-xs px-2 py-1 rounded-full bg-[#00E5CC]/15 text-[#00E5CC]">● live</span>
+        {onlineCount !== null && (
+          <span className="text-xs px-2 py-1 rounded-full bg-[#00E5CC]/15 text-[#00E5CC]">● {onlineCount} online</span>
+        )}
         <form onSubmit={submit}>
           <input ref={inputRef} value={q} onChange={e => setQ(e.target.value)} placeholder="/ to search…" aria-label="Search tasks" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-44" />
         </form>

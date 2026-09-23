@@ -184,7 +184,7 @@
    "impact": 3,
    "effort": 3,
    "risk": 2,
-   "status": "queued"
+   "status": "done"
   }
  ],
  "done": [
@@ -210,6 +210,7 @@
   "cycle 19: WIP limits on columns (soft warning, done uncapped)",
   "cycle 20: Task detail drawer (view/edit/delete, drag-grip fix)",
    "cycle 21: due dates (API field + pills + drawer editor)",
-   "cycle 22: board activity log endpoint (append-only, actor-stamped)"
+   "cycle 22: board activity log endpoint (append-only, actor-stamped)",
+   "cycle 23: presence over WS (join/leave/count + Topbar badge)"
   ]
 }
