@@ -1,1 +1,1 @@
-{"name": "@pulseflow/ui-kit", "version": "1.0.0", "type": "module", "main": "src/index.ts", "scripts": {"typecheck": "tsc --noEmit -p tsconfig.json"}, "devDependencies": {"typescript": "^5.7.3"}}
+{"name": "@pulseflow/ui-kit", "version": "1.0.0", "type": "module", "main": "src/index.ts", "scripts": {"typecheck": "tsc --noEmit -p tsconfig.json"}, "devDependencies": {"typescript": "^7.0.2"}}
