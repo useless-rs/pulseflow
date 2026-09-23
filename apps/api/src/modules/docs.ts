@@ -43,6 +43,7 @@ docsRouter.get('/openapi.json', (_req, res) => {
       '/api/projects': { get: { summary: 'List projects with task counts' }, post: { summary: 'Create project' } },
       '/api/projects/{id}': { get: { summary: 'Project detail with tasks' } },
       '/api/notifications': { get: { summary: 'List notifications' } },
+      '/api/notifications/read-all': { post: { summary: 'Mark all notifications read' } },
       '/api/export/tasks.csv': { get: { summary: 'Export tasks as CSV' } },
       '/api/activity': { get: { summary: 'Board activity log (newest first)' } },
     },

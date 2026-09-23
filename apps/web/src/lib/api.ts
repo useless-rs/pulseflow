@@ -49,6 +49,7 @@ export const api = {
     req<null>(`/api/tasks/${id}`, { method: 'DELETE' }),
   notifications: () => req<{ notifications: Array<{ id: string; text: string; read: boolean; at: string }> }>('/api/notifications'),
   markRead: (id: string) => req<{ ok: boolean }>(`/api/notifications/${id}/read`, { method: 'POST' }),
+  markAllRead: () => req<{ ok: boolean; marked: number }>('/api/notifications/read-all', { method: 'POST' }),
 };
 
 export function formatDate(iso: string) {

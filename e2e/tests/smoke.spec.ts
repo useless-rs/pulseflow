@@ -131,3 +131,15 @@ test('drawer delete removes the card', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: /details for/i })).toHaveCount(0);
   await expect(page.getByText('Docker + CI gates')).toHaveCount(0);
 });
+
+test('notifications mark all read clears badges', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByLabel('Email').fill('demo@pulseflow.io');
+  await page.getByLabel('Password').fill('password123');
+  await page.getByRole('button', { name: /sign in/i }).click();
+  await expect(page).toHaveURL('/', { timeout: 15000 });
+  await page.goto('/notifications');
+  await page.getByRole('button', { name: /mark all read/i }).click();
+  await expect(page.getByRole('button', { name: /mark all read/i })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /^mark read$/i })).toHaveCount(0);
+});

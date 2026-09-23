@@ -98,6 +98,10 @@ describe('platform', () => {
     const token = login.body.token;
     const n = await request(app).get('/api/notifications').set('Authorization', `Bearer ${token}`);
     expect(n.body.notifications.length).toBeGreaterThan(0);
+    const all = await request(app).post('/api/notifications/read-all').set('Authorization', `Bearer ${token}`);
+    expect(all.body.ok).toBe(true);
+    const after = await request(app).get('/api/notifications').set('Authorization', `Bearer ${token}`);
+    expect(after.body.notifications.every((x: { read: boolean }) => x.read)).toBe(true);
     const csv = await request(app).get('/api/export/tasks.csv').set('Authorization', `Bearer ${token}`);
     expect(csv.text).toContain('id,title,status');
     const p = await request(app).get('/api/projects/p_pulse').set('Authorization', `Bearer ${token}`);

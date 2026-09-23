@@ -200,9 +200,19 @@ export function Notifications() {
     await api.markRead(id).catch(() => {});
     setItems(prev => prev.map(n => (n.id === id ? { ...n, read: true } : n)));
   };
+  const markAll = async () => {
+    await api.markAllRead().catch(() => {});
+    setItems(prev => prev.map(n => ({ ...n, read: true })));
+  };
+  const unread = items.filter(n => !n.read).length;
   return (
     <div>
       <Topbar title="Notifications" />
+      {unread > 0 && (
+        <div className="mb-3">
+          <button onClick={() => void markAll()} className="text-xs px-3 py-1.5 rounded-xl border border-white/10 hover:bg-white/5">Mark all read ({unread})</button>
+        </div>
+      )}
       <div className="space-y-2">
         {items.length === 0 && <Card><div className="text-sm text-white/50">{isAuthed() ? 'No notifications yet.' : 'Sign in to see notifications.'}</div></Card>}
         {items.map(n => (

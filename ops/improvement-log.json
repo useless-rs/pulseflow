@@ -360,6 +360,18 @@
     "e2e accepts the confirm dialog, deletes via drawer, asserts card gone + dialog closed"
    ],
    "validate": "14/14 e2e green"
+  },
+  {
+   "n": 32,
+   "date": "2026-09-23",
+   "pick": "Notifications mark-all-read action",
+   "why": "Clearing notifications one by one is tedious; one-tap clearing is standard notification UX.",
+   "changes": [
+    "POST /api/notifications/read-all (returns marked count)",
+    "Notifications page button with unread count, hides when all read",
+    "api + e2e coverage for the full flow"
+   ],
+   "validate": "api build + 13/13; web typecheck + build; 15/15 e2e"
   }
  ]
 }
