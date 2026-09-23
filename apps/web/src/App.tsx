@@ -3,6 +3,7 @@ import { Sidebar } from './components/layout';
 import { Dashboard } from './pages/Dashboard';
 import { Kanban } from './pages/Kanban';
 import { Analytics, Calendar, Settings, Login } from './pages/More';
+import { NotFound } from './pages/NotFound';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/login" element={<Login />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>

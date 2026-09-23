@@ -6,6 +6,8 @@ import { env } from './config/env.js';
 import { authRouter } from './modules/auth.js';
 import { tasksRouter } from './modules/tasks.js';
 import { projectsRouter } from './modules/projects.js';
+import { docsRouter } from './modules/docs.js';
+import { rateLimit } from './middleware/rateLimit.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 export function createApp() {
@@ -14,7 +16,9 @@ export function createApp() {
   app.use(cors({ origin: env.ALLOWED_ORIGINS, credentials: true }));
   app.use(express.json({ limit: '1mb' }));
   app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+  app.use(rateLimit);
   app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'pulseflow-api', time: new Date().toISOString() }));
+  app.use('/docs', docsRouter);
   app.use('/api/auth', authRouter);
   app.use('/api/tasks', tasksRouter);
   app.use('/api/projects', projectsRouter);
