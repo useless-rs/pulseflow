@@ -120,7 +120,7 @@
    "impact": 2,
    "effort": 1,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 16,
@@ -152,6 +152,7 @@
   "cycle 9: dependabot (npm/actions/docker) + audit check",
   "cycle 10: vuln triage \u2014 vitest 2->4.1.11, vite dedupe to 6.4.3, 0 vulns (see improvement-log)",
   "cycle 11: a11y quick wins (skip link, landmarks, aria-current, focus-visible)",
-  "cycle 12: failed-login audit log (structured JSON, sanitized, no secrets)"
+  "cycle 12: failed-login audit log (structured JSON, sanitized, no secrets)",
+  "cycle 13: gzip/brotli compression middleware"
  ]
 }

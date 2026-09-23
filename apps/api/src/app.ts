@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -17,6 +18,7 @@ export function createApp() {
   const app = express();
   app.set('trust proxy', 1);
   app.use(requestId);
+  app.use(compression());
   app.use(helmet());
   app.use(cors({ origin: env.ALLOWED_ORIGINS, credentials: true }));
   app.use(express.json({ limit: '1mb' }));
