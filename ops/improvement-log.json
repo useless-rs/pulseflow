@@ -160,6 +160,17 @@
     "main is programmatically focusable (tabIndex -1)"
    ],
    "validate": "web typecheck + build green"
+  },
+  {
+   "n": 15,
+   "date": "2026-09-23",
+   "pick": "Command palette (Cmd+K)",
+   "why": "Topbar search only covered tasks; power users need one-keystroke nav + actions.",
+   "changes": [
+    "CommandPalette: pages + live task results, arrows/Enter/Esc, combobox aria, focus restore",
+    "Topbar search rebound to / key"
+   ],
+   "validate": "web typecheck + build green; api 10/10"
   }
  ]
 }
