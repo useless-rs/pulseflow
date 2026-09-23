@@ -168,3 +168,14 @@ test('shift-? opens shortcuts help', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog', { name: /keyboard shortcuts/i })).toHaveCount(0);
 });
+
+test('mobile nav reaches every route', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Mobile' });
+  await expect(nav.getByRole('link', { name: 'Calendar' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Notifications' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Settings' })).toBeVisible();
+  await nav.getByRole('link', { name: 'Calendar' }).click();
+  await expect(page).toHaveURL(/\/calendar/);
+});

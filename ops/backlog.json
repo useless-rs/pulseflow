@@ -281,6 +281,30 @@
    "effort": 2,
    "risk": 1,
    "status": "done"
+  },
+  {
+   "id": 36,
+   "title": "Mobile nav parity (all 7 routes reachable)",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "done"
+  },
+  {
+   "id": 37,
+   "title": "Calendar drag to reschedule (drop changes due date)",
+   "impact": 4,
+   "effort": 4,
+   "risk": 2,
+   "status": "queued"
+  },
+  {
+   "id": 38,
+   "title": "Task priorities with badge colors",
+   "impact": 3,
+   "effort": 3,
+   "risk": 1,
+   "status": "queued"
   }
  ],
  "done": [
@@ -319,6 +343,7 @@
    "cycle 32: notifications mark-all-read (endpoint + UI + e2e)",
    "cycle 33: sidebar unread notification badge",
    "cycle 34: overdue digest on Dashboard (count + link)",
-   "cycle 35: keyboard shortcuts help overlay (Shift+?)"
+   "cycle 35: keyboard shortcuts help overlay (Shift+?)",
+   "cycle 36: mobile nav parity (all 7 routes + e2e)"
   ]
 }

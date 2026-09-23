@@ -22,8 +22,8 @@ export default function App() {
         <ShortcutsHelp />
         <Sidebar />
         <main id="main-content" tabIndex={-1} className="flex-1 px-6 pb-10 max-w-6xl mx-auto w-full">
-          <nav className="md:hidden flex gap-3 py-3 text-sm text-white/60">
-            <Link to="/">Dash</Link><Link to="/kanban">Kanban</Link><Link to="/analytics">Stats</Link><Link to="/login">Login</Link>
+          <nav aria-label="Mobile" className="md:hidden flex flex-wrap gap-x-4 gap-y-2 py-3 text-sm text-white/60">
+            <Link to="/">Dash</Link><Link to="/kanban">Kanban</Link><Link to="/analytics">Stats</Link><Link to="/calendar">Calendar</Link><Link to="/notifications">Notifications</Link><Link to="/settings">Settings</Link><Link to="/login">Login</Link>
           </nav>
           <ErrorBoundary>
           <Routes>
