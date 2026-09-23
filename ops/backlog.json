@@ -56,7 +56,7 @@
    "impact": 3,
    "effort": 1,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 8,
@@ -130,6 +130,7 @@
   "cycle 3: CI split into api/web/shared jobs, root npm ci, all gates validated",
   "cycle 4: Dashboard live data (stats KPIs, distribution, activity, explicit states)",
   "cycle 5: global search deep-links to /kanban?q= with Cmd+K focus",
-  "cycle 6: Login SPA navigation (Navigate/useNavigate) + a11y labels"
+  "cycle 6: Login SPA navigation (Navigate/useNavigate) + a11y labels",
+  "cycle 7: ErrorBoundary around routes with retry"
  ]
 }

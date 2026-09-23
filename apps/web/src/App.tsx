@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Sidebar } from './components/layout';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Dashboard } from './pages/Dashboard';
 import { Kanban } from './pages/Kanban';
 import { Analytics, Calendar, Settings, Notifications } from './pages/More';
@@ -15,6 +16,7 @@ export default function App() {
           <nav className="md:hidden flex gap-3 py-3 text-sm text-white/60">
             <Link to="/">Dash</Link><Link to="/kanban">Kanban</Link><Link to="/analytics">Stats</Link><Link to="/login">Login</Link>
           </nav>
+          <ErrorBoundary>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/kanban" element={<Kanban />} />
@@ -25,6 +27,7 @@ export default function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </ErrorBoundary>
         </main>
       </div>
     </BrowserRouter>
