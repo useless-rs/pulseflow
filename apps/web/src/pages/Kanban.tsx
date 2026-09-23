@@ -7,7 +7,7 @@ import { useLocalTasks } from '../lib/hooks';
 import { api, isAuthed } from '../lib/api';
 import { useRealtime } from '../lib/realtime';
 import { TaskDrawer, type TaskPatch } from '../components/TaskDrawer';
-import { enqueueOp, dropOp, replaceTempId, loadQueue, isNetworkError } from '../lib/offlineQueue';
+import { enqueueOp, flushQueue, loadQueue, isNetworkError } from '../lib/offlineQueue';
 
 const cols = [['todo', 'To Do'], ['doing', 'Doing'], ['done', 'Done']];
 const STATUSES = ['todo', 'doing', 'done'];
@@ -137,23 +137,7 @@ export function Kanban() {
     if (flushing.current || !isAuthed()) return;
     flushing.current = true;
     try {
-      for (const op of loadQueue()) {
-        try {
-          if (op.kind === 'patch') { await api.patchTask(op.taskId, op.payload); }
-          else if (op.kind === 'delete') { await api.deleteTask(op.taskId); }
-          else {
-            const t = await api.createTask(op.payload);
-            replaceTempId(op.tempId, t.id);
-            const nid = t.id;
-            const tid = op.tempId;
-            setTasks(ts => ts.map(x => (x.id === tid ? { ...x, id: nid } : x)));
-          }
-          dropOp(op.id);
-        } catch (e) {
-          if (isNetworkError(e)) break;
-          dropOp(op.id);
-        }
-      }
+      await flushQueue((tid, nid) => setTasks(ts => ts.map(x => (x.id === tid ? { ...x, id: nid } : x))));
     } finally {
       flushing.current = false;
       refreshQueued();

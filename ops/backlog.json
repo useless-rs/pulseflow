@@ -217,6 +217,14 @@
    "effort": 4,
    "risk": 2,
    "status": "done"
+  },
+  {
+   "id": 28,
+   "title": "Shared flush engine for the offline outbox (single replay path)",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "done"
   }
  ],
  "done": [
@@ -247,6 +255,7 @@
    "cycle 24: functional New-task composer (API create + local fallback)",
    "cycle 25: calendar view with due-date tasks (month grid, overdue red)",
    "cycle 26: project filter on board (?project= deep links)",
-   "cycle 27: offline action queue (durable outbox + replay + e2e)"
+   "cycle 27: offline action queue (durable outbox + replay + e2e)",
+   "cycle 28: shared flush engine (one replay path for all surfaces)"
   ]
 }

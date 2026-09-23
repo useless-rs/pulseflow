@@ -316,6 +316,17 @@
     "e2e offline round-trip via context.setOffline (queue badge appears, clears after replay)"
    ],
    "validate": "web typecheck + build green; 11/11 e2e"
+  },
+  {
+   "n": 28,
+   "date": "2026-09-23",
+   "pick": "Shared flush engine for the offline outbox",
+   "why": "Replay logic lived inline in Kanban; any second surface (Calendar drawer next) would have forked it.",
+   "changes": [
+    "offlineQueue.flushQueue(op executor): FIFO replay, temp-id remap, network-error break, poison-drop",
+    "Kanban flush delegates to the shared engine (net -18/+23 lines trimmed to single path)"
+   ],
+   "validate": "web typecheck + build green; 11/11 e2e"
   }
  ]
 }

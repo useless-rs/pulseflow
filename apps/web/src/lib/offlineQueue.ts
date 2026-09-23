@@ -1,3 +1,5 @@
+import { api } from './api';
+
 export type TaskPatchPayload = {
   title?: string;
   description?: string;
@@ -48,6 +50,25 @@ export function enqueueOp(op: NewOp): QueuedOp {
 
 export function dropOp(id: string) {
   saveQueue(loadQueue().filter(o => o.id !== id));
+}
+
+export async function flushQueue(applyServerId: (tempId: string, realId: string) => void): Promise<number> {
+  for (const op of loadQueue()) {
+    try {
+      if (op.kind === 'patch') { await api.patchTask(op.taskId, op.payload); }
+      else if (op.kind === 'delete') { await api.deleteTask(op.taskId); }
+      else {
+        const t = await api.createTask(op.payload);
+        replaceTempId(op.tempId, t.id);
+        applyServerId(op.tempId, t.id);
+      }
+      dropOp(op.id);
+    } catch (e) {
+      if (isNetworkError(e)) break;
+      dropOp(op.id);
+    }
+  }
+  return loadQueue().length;
 }
 
 export function replaceTempId(tempId: string, realId: string) {
