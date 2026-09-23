@@ -383,6 +383,18 @@
     "e2e asserts the badged link before the mark-all-read test clears it"
    ],
    "validate": "web typecheck + build green; 16/16 e2e"
+  },
+  {
+   "n": 34,
+   "date": "2026-09-23",
+   "pick": "Overdue digest on Dashboard",
+   "why": "Due dates existed but nothing surfaced what is already late; deadline risk should shout from the landing page.",
+   "changes": [
+    "Needs attention card: overdue count, red rows with dates, board link, all-clear state",
+    "preview seeds carry relative due dates so logged-out view is meaningful",
+    "e2e asserts the digest count and an overdue row"
+   ],
+   "validate": "web typecheck + build green; 17/17 e2e"
   }
  ]
 }

@@ -13,10 +13,11 @@ function timeAgo(iso: string): string {
 }
 
 const previewStats = { total: 6, byStatus: { todo: 3, doing: 2, done: 1 } };
+const dayMs = 864e5;
 const previewTasks: TaskDto[] = [
-  { id: 'p1', title: 'Design logo system', description: '', status: 'done', projectId: 'p_pulse', tags: ['brand'] },
-  { id: 'p2', title: 'Build Express API', description: '', status: 'doing', projectId: 'p_pulse', tags: ['backend'] },
-  { id: 'p3', title: 'Ship Kanban UI', description: '', status: 'doing', projectId: 'p_pulse', tags: ['frontend'] },
+  { id: 'p1', title: 'Design logo system', description: '', status: 'done', projectId: 'p_pulse', tags: ['brand'], dueDate: new Date(Date.now() - dayMs).toISOString() },
+  { id: 'p2', title: 'Build Express API', description: '', status: 'doing', projectId: 'p_pulse', tags: ['backend'], dueDate: new Date(Date.now() - dayMs).toISOString() },
+  { id: 'p3', title: 'Ship Kanban UI', description: '', status: 'doing', projectId: 'p_pulse', tags: ['frontend'], dueDate: new Date(Date.now() + 2 * dayMs).toISOString() },
 ];
 
 export function Dashboard() {
@@ -53,6 +54,9 @@ export function Dashboard() {
   ];
   const recent = tasks.slice(0, 4);
   const donePct = stats.total ? Math.round(((stats.byStatus.done ?? 0) / stats.total) * 100) : 0;
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const overdue = tasks.filter(t => t.dueDate && t.status !== 'done' && new Date(t.dueDate).getTime() < todayStart.getTime());
 
   return (
     <div>
@@ -79,6 +83,20 @@ export function Dashboard() {
         ))}
       </div>
       <div className="grid lg:grid-cols-3 gap-4 mt-4">
+        <Card>
+          <div className="font-semibold mb-1">Needs attention</div>
+          <div className="text-xs text-white/50 mb-2" data-testid="overdue-count">
+            {overdue.length === 0 ? 'All clear — nothing overdue.' : `${overdue.length} overdue task${overdue.length === 1 ? '' : 's'}`}
+          </div>
+          {overdue.slice(0, 5).map(t => (
+            <div key={t.id} className="text-sm py-1.5 border-b border-white/5 flex gap-2 items-center">
+              <span className="w-2 h-2 rounded-full bg-[#FF5C7A] shrink-0" />
+              <span className="flex-1 text-white/80">{t.title}</span>
+              <span className="text-[11px] text-[#FF5C7A]">{t.dueDate ? new Date(t.dueDate).toLocaleDateString() : ''}</span>
+            </div>
+          ))}
+          <Link to="/kanban" className="inline-block mt-2 text-xs text-[#00E5CC] hover:underline">Open board →</Link>
+        </Card>
         <Card className="lg:col-span-2">
           <div className="font-semibold mb-3">Status distribution {authed && !loading && <Badge>live</Badge>}</div>
           {(['todo', 'doing', 'done'] as const).map(s => {

@@ -152,3 +152,10 @@ test('notifications mark all read clears badges', async ({ page }) => {
   await expect(page.getByRole('button', { name: /mark all read/i })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /^mark read$/i })).toHaveCount(0);
 });
+
+test('dashboard flags overdue work', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByText('Needs attention')).toBeVisible();
+  await expect(page.getByTestId('overdue-count')).toContainText('1 overdue task');
+  await expect(page.getByText('Build Express API').first()).toBeVisible();
+});
