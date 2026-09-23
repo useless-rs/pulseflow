@@ -80,7 +80,7 @@
    "impact": 4,
    "effort": 2,
    "risk": 1,
-   "status": "done"
+   "status": "queued"
   },
   {
    "id": 11,
@@ -121,6 +121,14 @@
    "effort": 1,
    "risk": 1,
    "status": "queued"
+  },
+  {
+   "id": 16,
+   "title": "Triage + clear npm audit findings",
+   "impact": 5,
+   "effort": 2,
+   "risk": 1,
+   "status": "done"
   }
  ],
  "done": [
@@ -134,6 +142,6 @@
   "cycle 7: ErrorBoundary around routes with retry",
   "cycle 8: OpenAPI expansion (all routes, schemas, security)",
   "cycle 9: dependabot (npm/actions/docker) + audit check",
-  "cycle 10: vuln triage \u2014 vitest 2->4.1.11, vite dedupe to 6.4.3, 0 vulns"
+  "cycle 10: vuln triage \u2014 vitest 2->4.1.11, vite dedupe to 6.4.3, 0 vulns (see improvement-log)"
  ]
 }
