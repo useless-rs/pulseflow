@@ -6,6 +6,7 @@ import { Card, Badge, Button } from '../components/ui';
 import { useLocalTasks } from '../lib/hooks';
 import { api, isAuthed } from '../lib/api';
 import { useRealtime } from '../lib/realtime';
+import { TaskDrawer, type TaskPatch } from '../components/TaskDrawer';
 
 const cols = [['todo', 'To Do'], ['doing', 'Doing'], ['done', 'Done']];
 const STATUSES = ['todo', 'doing', 'done'];
@@ -16,14 +17,19 @@ interface Task {
   title: string;
   status: string;
   tag: string;
+  description: string;
+  tags: string[];
 }
 
-function DraggableCard({ task, onMove }: { task: Task; onMove: (id: string, status: string) => void }) {
-  const { ref } = useDraggable({ id: task.id });
+function DraggableCard({ task, onMove, onOpen }: { task: Task; onMove: (id: string, status: string) => void; onOpen: (id: string) => void }) {
+  const { ref, handleRef } = useDraggable({ id: task.id });
   return (
     <div ref={ref} className="cursor-grab active:cursor-grabbing">
       <Card>
-        <div className="font-medium text-sm">{task.title}</div>
+        <div className="flex items-start gap-1.5">
+          <button ref={handleRef} aria-label={`Drag ${task.title} to reorder`} title="Drag to reorder" className="mt-0.5 shrink-0 cursor-grab active:cursor-grabbing text-white/30 hover:text-white/70 text-sm leading-none px-0.5 select-none">⋮⋮</button>
+          <button onClick={() => onOpen(task.id)} aria-label={`Open details for ${task.title}`} className="font-medium text-sm text-left hover:text-[#00E5CC] flex-1">{task.title}</button>
+        </div>
         <div className="mt-2 flex gap-1.5 items-center">
           <Badge>{task.tag}</Badge>
           <div className="ml-auto flex gap-1">
@@ -37,7 +43,7 @@ function DraggableCard({ task, onMove }: { task: Task; onMove: (id: string, stat
   );
 }
 
-function DroppableColumn({ status, label, tasks, total, limit, onMove }: { status: string; label: string; tasks: Task[]; total: number; limit?: number; onMove: (id: string, status: string) => void }) {
+function DroppableColumn({ status, label, tasks, total, limit, onMove, onOpen }: { status: string; label: string; tasks: Task[]; total: number; limit?: number; onMove: (id: string, status: string) => void; onOpen: (id: string) => void }) {
   const { ref } = useDroppable({ id: status });
   const over = typeof limit === 'number' && total > limit;
   return (
@@ -54,7 +60,7 @@ function DroppableColumn({ status, label, tasks, total, limit, onMove }: { statu
         </div>
       </div>
       <div className="space-y-2">
-        {tasks.map(t => <DraggableCard key={t.id} task={t} onMove={onMove} />)}
+        {tasks.map(t => <DraggableCard key={t.id} task={t} onMove={onMove} onOpen={onOpen} />)}
       </div>
     </div>
   );
@@ -66,13 +72,14 @@ export function Kanban() {
   const filter = params.get('q') ?? '';
   const [live, setLive] = useState(false);
   const [syncedAt, setSyncedAt] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const { events } = useRealtime();
 
   useEffect(() => {
     if (!isAuthed()) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task' })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [] })));
         setLive(true);
       })
       .catch(() => {});
@@ -85,7 +92,7 @@ export function Kanban() {
     if (type === 'hello' || !type.startsWith('task.')) return;
     api.tasks()
       .then(r => {
-        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task' })));
+        setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [] })));
         setSyncedAt(new Date().toISOString());
       })
       .catch(() => {});
@@ -101,6 +108,27 @@ export function Kanban() {
   };
 
   const visible = tasks.filter(t => t.title.toLowerCase().includes(filter.toLowerCase()));
+  const selected = tasks.find(t => t.id === selectedId) ?? null;
+
+  const saveTask = async (id: string, patch: TaskPatch) => {
+    const prev = tasks.find(t => t.id === id);
+    setTasks(ts => ts.map(t => (t.id === id ? { ...t, ...patch, tag: patch.tags[0] ?? t.tag } : t)));
+    if (live && id.startsWith('t_')) {
+      try { await api.patchTask(id, patch); }
+      catch { if (prev) setTasks(ts => ts.map(t => (t.id === id ? prev : t))); }
+    }
+    setSelectedId(null);
+  };
+
+  const deleteTask = async (id: string) => {
+    const prev = tasks;
+    setTasks(ts => ts.filter(t => t.id !== id));
+    if (live && id.startsWith('t_')) {
+      try { await api.deleteTask(id); }
+      catch { setTasks(prev); }
+    }
+    setSelectedId(null);
+  };
 
   return (
     <div>
@@ -109,7 +137,7 @@ export function Kanban() {
         <input value={filter} onChange={e => setParams(e.target.value ? { q: e.target.value } : {}, { replace: true })} placeholder="Filter tasks…" aria-label="Filter tasks" className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-56" />
         {live && <Badge>live api</Badge>}
         {syncedAt && <span className="text-xs text-[#00E5CC]">• synced {new Date(syncedAt).toLocaleTimeString()}</span>}
-        <span className="text-xs text-white/40">drag cards between columns</span>
+        <span className="text-xs text-white/40">drag cards by the grip</span>
       </div>
       <DragDropProvider onDragEnd={(event) => {
         if (event.canceled) return;
@@ -125,11 +153,20 @@ export function Kanban() {
       }}>
         <div className="grid md:grid-cols-3 gap-4">
           {cols.map(([key, label]) => (
-            <DroppableColumn key={key} status={key} label={label} tasks={visible.filter(t => t.status === key)} total={tasks.filter(t => t.status === key).length} limit={WIP_LIMITS[key]} onMove={moveTask} />
+            <DroppableColumn key={key} status={key} label={label} tasks={visible.filter(t => t.status === key)} total={tasks.filter(t => t.status === key).length} limit={WIP_LIMITS[key]} onMove={moveTask} onOpen={setSelectedId} />
           ))}
         </div>
       </DragDropProvider>
       <div className="mt-4"><Button>＋ New task (connects to /api/tasks)</Button></div>
+      {selected && (
+        <TaskDrawer
+          key={selected.id}
+          task={selected}
+          onClose={() => setSelectedId(null)}
+          onSave={(patch) => void saveTask(selected.id, patch)}
+          onDelete={() => void deleteTask(selected.id)}
+        />
+      )}
     </div>
   );
 }

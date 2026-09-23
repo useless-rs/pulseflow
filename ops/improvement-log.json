@@ -218,6 +218,19 @@
     "e2e asserts WIP 2/2 on seeded board"
    ],
    "validate": "web typecheck + build green; kanban e2e slice 2/2 green"
+  },
+  {
+   "n": 20,
+   "date": "2026-09-23",
+   "pick": "Task detail drawer (view/edit/delete)",
+   "why": "Cards were display-only; no way to edit title/description/tags or delete without the API.",
+   "changes": [
+    "TaskDrawer: slide-over dialog, Esc/backdrop close, autofocus, focus-safe",
+    "save/delete with optimistic update + rollback, live PATCH/DELETE for server tasks",
+    "drag-grip handle: dnd-kit ignores drag-starts on inner buttons, so cards got a ⋮⋮ grip via handleRef",
+    "e2e covers drawer edit; drag test grabs the grip"
+   ],
+   "validate": "web typecheck + build green; 7/7 e2e, 10/10 api, 3/3 shared"
   }
  ]
 }

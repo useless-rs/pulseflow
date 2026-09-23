@@ -11,3 +11,5 @@ apps/web/dist/
 apps/api/dist/
 generated/
 *.tsbuildinfo
+e2e/playwright-report/
+e2e/test-results/

@@ -23,10 +23,10 @@ test('kanban ?q= deep link filters tasks', async ({ page }) => {
 
 test('kanban card drags between columns', async ({ page }) => {
   await page.goto('/kanban');
-  const card = page.getByText('Write README that gets stars');
+  const grip = page.getByRole('button', { name: 'Drag Write README that gets stars to reorder', exact: true });
   const doingCol = page.getByTestId('col-doing');
-  await expect(card).toBeVisible();
-  const from = await card.boundingBox();
+  await expect(grip).toBeVisible();
+  const from = await grip.boundingBox();
   const to = await doingCol.boundingBox();
   if (!from || !to) throw new Error('no boxes');
   await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
@@ -44,4 +44,14 @@ test('command palette opens and jumps to analytics', async ({ page }) => {
   await page.getByRole('combobox', { name: /command palette/i }).fill('analytics');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/analytics/);
+});
+
+test('task drawer opens and edits a title', async ({ page }) => {
+  await page.goto('/kanban');
+  await page.getByRole('button', { name: 'Open details for Docker + CI gates', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: /details for/i })).toBeVisible();
+  await page.getByLabel('Title').fill('Docker + CI gates v2');
+  await page.getByRole('button', { name: /save changes/i }).click();
+  await expect(page.getByText('Docker + CI gates v2')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: /details for/i })).toHaveCount(0);
 });

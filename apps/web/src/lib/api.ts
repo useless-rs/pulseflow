@@ -41,6 +41,8 @@ export const api = {
   taskStats: () => req<{ total: number; byStatus: Record<TaskDto['status'], number> }>('/api/tasks/stats'),
   patchTask: (id: string, patch: Partial<TaskDto>) =>
     req<TaskDto>(`/api/tasks/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
+  deleteTask: (id: string) =>
+    req<null>(`/api/tasks/${id}`, { method: 'DELETE' }),
   notifications: () => req<{ notifications: Array<{ id: string; text: string; read: boolean; at: string }> }>('/api/notifications'),
   markRead: (id: string) => req<{ ok: boolean }>(`/api/notifications/${id}/read`, { method: 'POST' }),
 };
