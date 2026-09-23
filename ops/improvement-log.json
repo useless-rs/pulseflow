@@ -339,6 +339,17 @@
     "e2e opens a calendar chip, edits the title, saves, asserts the grid"
    ],
    "validate": "web typecheck + build green; 12/12 e2e"
+  },
+  {
+   "n": 30,
+   "date": "2026-09-23",
+   "pick": "Sign out clears the session",
+   "why": "No way to end a session; auth without logout is half an auth story.",
+   "changes": [
+    "Settings session card with sign-out (clears token, replace-navigates to login)",
+    "e2e logs in, signs out, asserts redirect + login form"
+   ],
+   "validate": "web typecheck + build green; 13/13 e2e"
   }
  ]
 }

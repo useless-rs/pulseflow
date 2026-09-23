@@ -109,3 +109,15 @@ test('calendar task opens the detail drawer', async ({ page }) => {
   await expect(page.getByText('Write README that gets stars v2').first()).toBeVisible();
   await expect(page.getByRole('dialog', { name: /details for/i })).toHaveCount(0);
 });
+
+test('sign out clears the session', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByLabel('Email').fill('demo@pulseflow.io');
+  await page.getByLabel('Password').fill('password123');
+  await page.getByRole('button', { name: /sign in/i }).click();
+  await expect(page).toHaveURL('/', { timeout: 15000 });
+  await page.goto('/settings');
+  await page.getByRole('button', { name: /sign out/i }).click();
+  await expect(page).toHaveURL(/\/login/);
+  await expect(page.getByLabel('Email')).toBeVisible();
+});

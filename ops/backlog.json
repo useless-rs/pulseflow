@@ -233,6 +233,30 @@
    "effort": 2,
    "risk": 1,
    "status": "done"
+  },
+  {
+   "id": 30,
+   "title": "Sign out clears the session (Settings)",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "done"
+  },
+  {
+   "id": 31,
+   "title": "Drawer delete flow e2e coverage",
+   "impact": 2,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 32,
+   "title": "Notifications mark-all-read action",
+   "impact": 2,
+   "effort": 1,
+   "risk": 1,
+   "status": "queued"
   }
  ],
  "done": [
@@ -265,6 +289,7 @@
    "cycle 26: project filter on board (?project= deep links)",
    "cycle 27: offline action queue (durable outbox + replay + e2e)",
    "cycle 28: shared flush engine (one replay path for all surfaces)",
-   "cycle 29: calendar tasks open the shared TaskDrawer"
+   "cycle 29: calendar tasks open the shared TaskDrawer",
+   "cycle 30: sign out clears the session (Settings + e2e)"
   ]
 }

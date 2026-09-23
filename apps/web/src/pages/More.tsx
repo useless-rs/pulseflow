@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../components/layout';
 import { Card, Badge } from '../components/ui';
 import { api, isAuthed } from '../lib/api';
@@ -169,10 +170,23 @@ export function Calendar() {
 }
 
 export function Settings() {
+  const navigate = useNavigate();
+  const authed = isAuthed();
+  const signOut = () => {
+    localStorage.removeItem('pf_token');
+    navigate('/login', { replace: true });
+  };
   return (
     <div>
       <Topbar title="Settings" />
       <Card><div className="font-semibold">Workspace</div><div className="text-sm text-white/60 mt-1">Theme, API URL, token. Brand: #6C5CFF / #00E5CC on #0B0B14.</div></Card>
+      <div className="mt-4">
+        <Card>
+          <div className="font-semibold mb-1">Session</div>
+          <div className="text-sm text-white/60 mb-3">{authed ? 'Signed in with a stored API token.' : 'Not signed in.'}</div>
+          {authed && <button onClick={signOut} className="px-4 py-2 rounded-xl border border-[#FF5C7A]/40 text-[#FF5C7A] text-sm hover:bg-[#FF5C7A]/10">Sign out</button>}
+        </Card>
+      </div>
     </div>
   );
 }
