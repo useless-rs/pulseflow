@@ -1,1 +1,32 @@
-{"cycles": [{"n": 1, "date": "2026-09-23", "pick": "Strict auth rate limit (10/10min) + trust proxy", "why": "Login had only the 100/min global limiter; OWASP + 2026 consensus is 5-10 tries per 5-15min on auth routes. Highest impact/effort ratio.", "research": ["OWASP Blocking Brute Force Attacks", "express-rate-limit login patterns (5-10/5-15min)", "CVE-2026-30827 (noted; we use custom keyed limiter, no subnet masking)"], "changes": ["rateLimit.ts: createRateLimiter factory, authLimiter 10/10min, test reset hook", "app.ts: trust proxy=1, authLimiter on /api/auth", "tests: 429-after-11-attempts"], "validate": "tsc clean, 10/10 vitest green"}]}
+{
+ "cycles": [
+  {
+   "n": 1,
+   "date": "2026-09-23",
+   "pick": "Strict auth rate limit (10/10min) + trust proxy",
+   "why": "Login had only the 100/min global limiter; OWASP + 2026 consensus is 5-10 tries per 5-15min on auth routes. Highest impact/effort ratio.",
+   "research": [
+    "OWASP Blocking Brute Force Attacks",
+    "express-rate-limit login patterns (5-10/5-15min)",
+    "CVE-2026-30827 (noted; we use custom keyed limiter, no subnet masking)"
+   ],
+   "changes": [
+    "rateLimit.ts: createRateLimiter factory, authLimiter 10/10min, test reset hook",
+    "app.ts: trust proxy=1, authLimiter on /api/auth",
+    "tests: 429-after-11-attempts"
+   ],
+   "validate": "tsc clean, 10/10 vitest green"
+  },
+  {
+   "n": 2,
+   "date": "2026-09-23",
+   "pick": "Fix Dockerfiles (root-context workspace builds)",
+   "why": "Old Dockerfiles ran --workspace installs with no root package.json and missed packages/config for tsc extends; images could never build.",
+   "changes": [
+    "Dockerfile.api/web rewritten: copy root+workspace package.jsons, npm ci, build, slim prod runner (api runs as non-root node)",
+    ".dockerignore hardened (nested node_modules/dist, .git, coverage, .env)"
+   ],
+   "validate": "docker daemon blocked (socket perms); validated by faithful staging: npm ci + workspace build OK, runner npm ci --omit=dev OK, booted dist serves /health + real login + /stats"
+  }
+ ]
+}
