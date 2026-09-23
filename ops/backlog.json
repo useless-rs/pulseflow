@@ -88,7 +88,7 @@
    "impact": 5,
    "effort": 4,
    "risk": 2,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 12,
@@ -156,6 +156,7 @@
   "cycle 13: gzip/brotli compression middleware",
   "cycle 14: route-change focus (h1 first, main fallback)",
   "cycle 15: command palette (Cmd+K, combobox, focus restore)",
-  "cycle 16: Playwright E2E (4 browser specs + CI job)"
+  "cycle 16: Playwright E2E (4 browser specs + CI job)",
+  "cycle 17: Kanban drag-and-drop (dnd-kit, API-persisted, e2e-proven)"
  ]
 }

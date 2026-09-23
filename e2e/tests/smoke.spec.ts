@@ -20,6 +20,22 @@ test('kanban ?q= deep link filters tasks', async ({ page }) => {
   await expect(page.getByText('Design logo system')).toHaveCount(0);
 });
 
+test('kanban card drags between columns', async ({ page }) => {
+  await page.goto('/kanban');
+  const card = page.getByText('Write README that gets stars');
+  const doingCol = page.getByTestId('col-doing');
+  await expect(card).toBeVisible();
+  const from = await card.boundingBox();
+  const to = await doingCol.boundingBox();
+  if (!from || !to) throw new Error('no boxes');
+  await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(to.x + to.width / 2, to.y + 120, { steps: 12 });
+  await page.mouse.up();
+  await expect(doingCol.getByText('Write README that gets stars').first()).toBeVisible();
+  await expect(page.getByTestId('col-todo').getByText('Write README that gets stars')).toHaveCount(0);
+});
+
 test('command palette opens and jumps to analytics', async ({ page }) => {
   await page.goto('/');
   await page.keyboard.press('Control+k');
