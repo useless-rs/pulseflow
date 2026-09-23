@@ -72,9 +72,10 @@ export function CommandPalette() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center pt-24" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div className="fixed inset-0 z-50 flex justify-center pt-24" role="dialog" aria-modal="true" aria-labelledby="pf-palette-title">
       <div className="absolute inset-0 bg-black/60" onClick={close} aria-hidden="true" />
       <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#14141F] shadow-2xl overflow-hidden h-fit">
+        <h2 id="pf-palette-title" className="sr-only">Command palette</h2>
         <input
           ref={inputRef}
           value={q}

@@ -171,6 +171,18 @@
     "Topbar search rebound to / key"
    ],
    "validate": "web typecheck + build green; api 10/10"
+  },
+  {
+   "n": 16,
+   "date": "2026-09-23",
+   "pick": "Playwright E2E suite + CI job",
+   "why": "No browser-level safety net; unit tests cannot catch routing/render/integration breaks.",
+   "changes": [
+    "e2e workspace: playwright config (dual webServers), 4 smoke specs",
+    "CI e2e job (chromium + report artifact)",
+    "palette dialog got its own labelled title (test caught shared accessible name)"
+   ],
+   "validate": "4/4 green in real Chromium locally; YAML parsed"
   }
  ]
 }
