@@ -19,7 +19,7 @@ export function Sidebar() {
         <LogoLockup />
       </div>
       {links.map(([to, label]) => (
-        <Link key={to} to={to} className={`px-3 py-2 rounded-lg text-sm ${loc.pathname === to ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5'}`}>
+        <Link key={to} to={to} aria-current={loc.pathname === to ? 'page' : undefined} className={`px-3 py-2 rounded-lg text-sm ${loc.pathname === to ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5'}`}>
           {label}
         </Link>
       ))}

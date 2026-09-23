@@ -80,7 +80,7 @@
    "impact": 4,
    "effort": 2,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 11,
@@ -129,6 +129,14 @@
    "effort": 2,
    "risk": 1,
    "status": "done"
+  },
+  {
+   "id": 17,
+   "title": "Route-change focus management (move focus to view heading)",
+   "impact": 3,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
   }
  ],
  "done": [
@@ -142,6 +150,7 @@
   "cycle 7: ErrorBoundary around routes with retry",
   "cycle 8: OpenAPI expansion (all routes, schemas, security)",
   "cycle 9: dependabot (npm/actions/docker) + audit check",
-  "cycle 10: vuln triage \u2014 vitest 2->4.1.11, vite dedupe to 6.4.3, 0 vulns (see improvement-log)"
+  "cycle 10: vuln triage \u2014 vitest 2->4.1.11, vite dedupe to 6.4.3, 0 vulns (see improvement-log)",
+  "cycle 11: a11y quick wins (skip link, landmarks, aria-current, focus-visible)"
  ]
 }

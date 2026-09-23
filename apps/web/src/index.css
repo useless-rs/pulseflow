@@ -31,3 +31,9 @@ body { font-family: Inter, system-ui, sans-serif; }
 }
 .pf-gradient-bg { background: var(--pf-gradient); }
 .pf-font-display { font-family: var(--font-display); }
+
+:focus-visible {
+  outline: 2px solid #00E5CC;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
