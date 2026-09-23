@@ -81,3 +81,21 @@ test('project filter narrows the board', async ({ page }) => {
   await expect(page.getByText('Build Express API')).toHaveCount(0);
   await expect(page).toHaveURL(/project=p_growth/);
 });
+
+test('offline moves queue and replay on reconnect', async ({ page, context }) => {
+  await page.goto('/login');
+  await page.getByLabel('Email').fill('demo@pulseflow.io');
+  await page.getByLabel('Password').fill('password123');
+  await page.getByRole('button', { name: /sign in/i }).click();
+  await expect(page).toHaveURL('/', { timeout: 15000 });
+  await page.goto('/kanban');
+  await expect(page.getByText('live api').first()).toBeVisible({ timeout: 15000 });
+  await context.setOffline(true);
+  const btn = page.getByRole('button', { name: /^Move .* to (To Do|Doing|Done)$/ }).first();
+  const label = await btn.getAttribute('aria-label');
+  if (!label?.match(/^Move (.+) to (.+)$/)) throw new Error('no move button found');
+  await btn.click();
+  await expect(page.getByText(/queued/i).first()).toBeVisible({ timeout: 10000 });
+  await context.setOffline(false);
+  await expect(page.getByText(/queued/i)).toHaveCount(0, { timeout: 20000 });
+});

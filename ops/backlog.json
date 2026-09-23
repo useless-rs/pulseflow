@@ -216,7 +216,7 @@
    "impact": 4,
    "effort": 4,
    "risk": 2,
-   "status": "queued"
+   "status": "done"
   }
  ],
  "done": [
@@ -246,6 +246,7 @@
    "cycle 23: presence over WS (join/leave/count + Topbar badge)",
    "cycle 24: functional New-task composer (API create + local fallback)",
    "cycle 25: calendar view with due-date tasks (month grid, overdue red)",
-   "cycle 26: project filter on board (?project= deep links)"
+   "cycle 26: project filter on board (?project= deep links)",
+   "cycle 27: offline action queue (durable outbox + replay + e2e)"
   ]
 }

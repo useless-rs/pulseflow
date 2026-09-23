@@ -304,6 +304,18 @@
     "e2e selects Growth and asserts scoping + URL"
    ],
    "validate": "web typecheck + build green; 10/10 e2e"
+  },
+  {
+   "n": 27,
+   "date": "2026-09-23",
+   "pick": "Offline action queue with replay",
+   "why": "Network failures rolled back optimistic moves and lost creates; research consensus is a durable outbox with ordered replay.",
+   "changes": [
+    "offlineQueue: localStorage-backed FIFO outbox (patch/delete/create) with temp-id remap",
+    "mutations keep optimistic state on network errors; flush on reconnect + retry badge",
+    "e2e offline round-trip via context.setOffline (queue badge appears, clears after replay)"
+   ],
+   "validate": "web typecheck + build green; 11/11 e2e"
   }
  ]
 }

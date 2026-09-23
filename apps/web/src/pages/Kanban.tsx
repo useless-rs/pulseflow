@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DragDropProvider, useDraggable, useDroppable } from '@dnd-kit/react';
 import { Topbar } from '../components/layout';
@@ -7,6 +7,7 @@ import { useLocalTasks } from '../lib/hooks';
 import { api, isAuthed } from '../lib/api';
 import { useRealtime } from '../lib/realtime';
 import { TaskDrawer, type TaskPatch } from '../components/TaskDrawer';
+import { enqueueOp, dropOp, replaceTempId, loadQueue, isNetworkError } from '../lib/offlineQueue';
 
 const cols = [['todo', 'To Do'], ['doing', 'Doing'], ['done', 'Done']];
 const STATUSES = ['todo', 'doing', 'done'];
@@ -129,12 +130,52 @@ export function Kanban() {
       .catch(() => {});
   }, [events, setTasks]);
 
+  const [queuedCount, setQueuedCount] = useState(() => loadQueue().length);
+  const flushing = useRef(false);
+  const refreshQueued = () => setQueuedCount(loadQueue().length);
+  const flush = async () => {
+    if (flushing.current || !isAuthed()) return;
+    flushing.current = true;
+    try {
+      for (const op of loadQueue()) {
+        try {
+          if (op.kind === 'patch') { await api.patchTask(op.taskId, op.payload); }
+          else if (op.kind === 'delete') { await api.deleteTask(op.taskId); }
+          else {
+            const t = await api.createTask(op.payload);
+            replaceTempId(op.tempId, t.id);
+            const nid = t.id;
+            const tid = op.tempId;
+            setTasks(ts => ts.map(x => (x.id === tid ? { ...x, id: nid } : x)));
+          }
+          dropOp(op.id);
+        } catch (e) {
+          if (isNetworkError(e)) break;
+          dropOp(op.id);
+        }
+      }
+    } finally {
+      flushing.current = false;
+      refreshQueued();
+    }
+  };
+  useEffect(() => {
+    refreshQueued();
+    const onOnline = () => { void flush(); };
+    window.addEventListener('online', onOnline);
+    void flush();
+    return () => window.removeEventListener('online', onOnline);
+  }, []);
+
   const moveTask = async (id: string, status: string) => {
     const prev = tasks.find(t => t.id === id)?.status;
     move(id, status);
     if (live && id.startsWith('t_')) {
       try { await api.patchTask(id, { status: status as 'todo' | 'doing' | 'done' }); }
-      catch { move(id, prev ?? status); }
+      catch (e) {
+        if (isNetworkError(e)) { enqueueOp({ kind: 'patch', taskId: id, payload: { status: status as 'todo' | 'doing' | 'done' } }); refreshQueued(); }
+        else move(id, prev ?? status);
+      }
     }
   };
 
@@ -145,7 +186,13 @@ export function Kanban() {
       try {
         const t = await api.createTask({ title, projectId });
         setTasks(ts => [...ts, { id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate, projectId: t.projectId }]);
-      } catch { return; }
+      } catch (e) {
+        if (!isNetworkError(e)) return;
+        const tempId = `l_${Date.now()}`;
+        setTasks(ts => [...ts, { id: tempId, title, status: 'todo', tag: 'task', description: '', tags: [], projectId }]);
+        enqueueOp({ kind: 'create', tempId, payload: { title, projectId } });
+        refreshQueued();
+      }
     } else {
       setTasks(ts => [...ts, { id: `l_${Date.now()}`, title, status: 'todo', tag: 'task', description: '', tags: [], projectId: project || 'p_pulse' }]);
     }
@@ -173,7 +220,10 @@ export function Kanban() {
     setTasks(ts => ts.map(t => (t.id === id ? { ...t, ...patch, tag: patch.tags[0] ?? t.tag } : t)));
     if (live && id.startsWith('t_')) {
       try { await api.patchTask(id, patch); }
-      catch { if (prev) setTasks(ts => ts.map(t => (t.id === id ? prev : t))); }
+      catch (e) {
+        if (isNetworkError(e)) { enqueueOp({ kind: 'patch', taskId: id, payload: patch }); refreshQueued(); }
+        else if (prev) setTasks(ts => ts.map(t => (t.id === id ? prev : t)));
+      }
     }
     setSelectedId(null);
   };
@@ -183,7 +233,10 @@ export function Kanban() {
     setTasks(ts => ts.filter(t => t.id !== id));
     if (live && id.startsWith('t_')) {
       try { await api.deleteTask(id); }
-      catch { setTasks(prev); }
+      catch (e) {
+        if (isNetworkError(e)) { enqueueOp({ kind: 'delete', taskId: id }); refreshQueued(); }
+        else setTasks(prev);
+      }
     }
     setSelectedId(null);
   };
@@ -199,6 +252,9 @@ export function Kanban() {
         </select>
         {live && <Badge>live api</Badge>}
         {syncedAt && <span className="text-xs text-[#00E5CC]">• synced {new Date(syncedAt).toLocaleTimeString()}</span>}
+        {queuedCount > 0 && (
+          <button onClick={() => void flush()} title="Retry sync now" className="text-xs px-2 py-1 rounded-full bg-[#FFC94D]/15 text-[#FFC94D]">● {queuedCount} queued</button>
+        )}
         <span className="text-xs text-white/40">drag cards by the grip</span>
       </div>
       <DragDropProvider onDragEnd={(event) => {
