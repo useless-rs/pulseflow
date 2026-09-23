@@ -72,7 +72,7 @@
    "impact": 3,
    "effort": 1,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 10,
@@ -132,6 +132,7 @@
   "cycle 5: global search deep-links to /kanban?q= with Cmd+K focus",
   "cycle 6: Login SPA navigation (Navigate/useNavigate) + a11y labels",
   "cycle 7: ErrorBoundary around routes with retry",
-  "cycle 8: OpenAPI expansion (all routes, schemas, security)"
+  "cycle 8: OpenAPI expansion (all routes, schemas, security)",
+  "cycle 9: dependabot (npm/actions/docker) + audit check"
  ]
 }
