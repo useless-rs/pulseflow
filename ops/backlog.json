@@ -48,7 +48,7 @@
    "impact": 2,
    "effort": 1,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   },
   {
    "id": 7,
@@ -129,6 +129,7 @@
   "cycle 2: self-contained Dockerfiles + .dockerignore hardening, validated via staged npm ci/build/boot/smoke (docker daemon unavailable)",
   "cycle 3: CI split into api/web/shared jobs, root npm ci, all gates validated",
   "cycle 4: Dashboard live data (stats KPIs, distribution, activity, explicit states)",
-  "cycle 5: global search deep-links to /kanban?q= with Cmd+K focus"
+  "cycle 5: global search deep-links to /kanban?q= with Cmd+K focus",
+  "cycle 6: Login SPA navigation (Navigate/useNavigate) + a11y labels"
  ]
 }

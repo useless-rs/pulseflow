@@ -62,6 +62,17 @@
     "Kanban: filter is the URL ?q= param (shareable, back-button safe)"
    ],
    "validate": "web typecheck + build green"
+  },
+  {
+   "n": 6,
+   "date": "2026-09-23",
+   "pick": "Login render-phase location.href fix",
+   "why": "Side effect during render + full-page reloads break SPA state and StrictMode safety.",
+   "changes": [
+    "<Navigate replace> for authed users, useNavigate after login",
+    "aria-labels + role=alert on error"
+   ],
+   "validate": "web typecheck + build green"
   }
  ]
 }
