@@ -57,3 +57,11 @@ test('task drawer opens and edits a title', async ({ page }) => {
   await expect(page.getByText('Docker + CI gates v2')).toBeVisible();
   await expect(page.getByRole('dialog', { name: /details for/i })).toHaveCount(0);
 });
+
+test('composer creates a task on the board', async ({ page }) => {
+  await page.goto('/kanban');
+  await page.getByRole('button', { name: /new task/i }).click();
+  await page.getByLabel('New task title').fill('Cycle 24 e2e task');
+  await page.getByRole('button', { name: /^add$/i }).click();
+  await expect(page.getByTestId('col-todo').getByText('Cycle 24 e2e task')).toBeVisible();
+});

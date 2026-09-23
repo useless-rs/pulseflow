@@ -185,6 +185,38 @@
    "effort": 3,
    "risk": 2,
    "status": "done"
+  },
+  {
+   "id": 24,
+   "title": "Functional New-task composer (was a dead button)",
+   "impact": 4,
+   "effort": 2,
+   "risk": 1,
+   "status": "done"
+  },
+  {
+   "id": 25,
+   "title": "Calendar view renders tasks with due dates",
+   "impact": 4,
+   "effort": 3,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 26,
+   "title": "Project filter on board (API already has projects)",
+   "impact": 4,
+   "effort": 3,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 27,
+   "title": "Offline action queue with replay on reconnect",
+   "impact": 4,
+   "effort": 4,
+   "risk": 2,
+   "status": "queued"
   }
  ],
  "done": [
@@ -211,6 +243,7 @@
   "cycle 20: Task detail drawer (view/edit/delete, drag-grip fix)",
    "cycle 21: due dates (API field + pills + drawer editor)",
    "cycle 22: board activity log endpoint (append-only, actor-stamped)",
-   "cycle 23: presence over WS (join/leave/count + Topbar badge)"
+   "cycle 23: presence over WS (join/leave/count + Topbar badge)",
+   "cycle 24: functional New-task composer (API create + local fallback)"
   ]
 }

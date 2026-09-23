@@ -88,6 +88,9 @@ export function Kanban() {
   const [live, setLive] = useState(false);
   const [syncedAt, setSyncedAt] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [composing, setComposing] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [projectId, setProjectId] = useState('p_pulse');
   const { events } = useRealtime();
 
   useEffect(() => {
@@ -96,6 +99,12 @@ export function Kanban() {
       .then(r => {
         setTasks(r.tasks.map(t => ({ id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate })));
         setLive(true);
+      })
+      .catch(() => {});
+    api.projects()
+      .then(r => {
+        const first = (r as { projects: Array<{ id: string }> }).projects[0];
+        if (first) setProjectId(first.id);
       })
       .catch(() => {});
   }, [setTasks]);
@@ -120,6 +129,21 @@ export function Kanban() {
       try { await api.patchTask(id, { status: status as 'todo' | 'doing' | 'done' }); }
       catch { move(id, prev ?? status); }
     }
+  };
+
+  const createTask = async () => {
+    const title = draft.trim();
+    if (!title) return;
+    if (live) {
+      try {
+        const t = await api.createTask({ title, projectId });
+        setTasks(ts => [...ts, { id: t.id, title: t.title, status: t.status, tag: t.tags[0] ?? 'task', description: t.description ?? '', tags: t.tags ?? [], dueDate: t.dueDate }]);
+      } catch { return; }
+    } else {
+      setTasks(ts => [...ts, { id: `l_${Date.now()}`, title, status: 'todo', tag: 'task', description: '', tags: [] }]);
+    }
+    setDraft('');
+    setComposing(false);
   };
 
   const visible = tasks.filter(t => t.title.toLowerCase().includes(filter.toLowerCase()));
@@ -172,7 +196,27 @@ export function Kanban() {
           ))}
         </div>
       </DragDropProvider>
-      <div className="mt-4"><Button>＋ New task (connects to /api/tasks)</Button></div>
+      <div className="mt-4">
+        {!composing ? (
+          <Button onClick={() => setComposing(true)}>＋ New task</Button>
+        ) : (
+          <form
+            onSubmit={e => { e.preventDefault(); void createTask(); }}
+            className="flex gap-2 items-center"
+          >
+            <input
+              value={draft}
+              onChange={e => setDraft(e.target.value)}
+              placeholder="Task title…"
+              aria-label="New task title"
+              autoFocus
+              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm w-72"
+            />
+            <button type="submit" disabled={!draft.trim()} className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-[#6C5CFF] to-[#00E5CC] text-black text-sm disabled:opacity-50">Add</button>
+            <button type="button" onClick={() => { setComposing(false); setDraft(''); }} className="px-4 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/5">Cancel</button>
+          </form>
+        )}
+      </div>
       {selected && (
         <TaskDrawer
           key={selected.id}
