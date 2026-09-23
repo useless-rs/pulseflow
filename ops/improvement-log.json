@@ -372,6 +372,17 @@
     "api + e2e coverage for the full flow"
    ],
    "validate": "api build + 13/13; web typecheck + build; 15/15 e2e"
+  },
+  {
+   "n": 33,
+   "date": "2026-09-23",
+   "pick": "Sidebar unread notification badge",
+   "why": "Unread state was invisible until opening Notifications; research favors a count badge on the nav destination.",
+   "changes": [
+    "Sidebar fetches unread count per navigation, badge on Notifications link (hidden at zero)",
+    "e2e asserts the badged link before the mark-all-read test clears it"
+   ],
+   "validate": "web typecheck + build green; 16/16 e2e"
   }
  ]
 }

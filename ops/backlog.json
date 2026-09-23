@@ -257,6 +257,30 @@
    "effort": 1,
    "risk": 1,
    "status": "done"
+  },
+  {
+   "id": 33,
+   "title": "Sidebar unread notification badge",
+   "impact": 3,
+   "effort": 1,
+   "risk": 1,
+   "status": "done"
+  },
+  {
+   "id": 34,
+   "title": "Overdue digest on Dashboard (count + link)",
+   "impact": 3,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
+  },
+  {
+   "id": 35,
+   "title": "Keyboard shortcuts help overlay (Shift+?)",
+   "impact": 2,
+   "effort": 2,
+   "risk": 1,
+   "status": "queued"
   }
  ],
  "done": [
@@ -292,6 +316,7 @@
    "cycle 29: calendar tasks open the shared TaskDrawer",
    "cycle 30: sign out clears the session (Settings + e2e)",
    "cycle 31: drawer delete flow e2e coverage (confirm accept)",
-   "cycle 32: notifications mark-all-read (endpoint + UI + e2e)"
+   "cycle 32: notifications mark-all-read (endpoint + UI + e2e)",
+   "cycle 33: sidebar unread notification badge"
   ]
 }
