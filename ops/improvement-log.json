@@ -39,6 +39,18 @@
     "added typecheck script to ui-kit"
    ],
    "validate": "YAML parsed; every CI command executed locally green (api 10/10, shared 3/3, web build, all typechecks)"
+  },
+  {
+   "n": 4,
+   "date": "2026-09-23",
+   "pick": "Dashboard live data",
+   "why": "Dashboard showed hardcoded numbers (48/wk, 9, 132) and fake activity \u2014 a number with no context is trivia; failures must never render as stale values.",
+   "changes": [
+    "Dashboard fetches /stats + /tasks + /notifications when authed; preview badge + sign-in CTA otherwise",
+    "explicit loading/error-with-retry states",
+    "status distribution bars + relative timestamps"
+   ],
+   "validate": "web typecheck + build green"
   }
  ]
 }
