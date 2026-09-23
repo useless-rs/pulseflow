@@ -159,3 +159,12 @@ test('dashboard flags overdue work', async ({ page }) => {
   await expect(page.getByTestId('overdue-count')).toContainText('1 overdue task');
   await expect(page.getByText('Build Express API').first()).toBeVisible();
 });
+
+test('shift-? opens shortcuts help', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('?');
+  await expect(page.getByRole('dialog', { name: /keyboard shortcuts/i })).toBeVisible();
+  await expect(page.getByText('Open command palette')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog', { name: /keyboard shortcuts/i })).toHaveCount(0);
+});

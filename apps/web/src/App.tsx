@@ -3,6 +3,7 @@ import { Sidebar } from './components/layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouteFocus } from './components/RouteFocus';
 import { CommandPalette } from './components/CommandPalette';
+import { ShortcutsHelp } from './components/ShortcutsHelp';
 import { Dashboard } from './pages/Dashboard';
 import { Kanban } from './pages/Kanban';
 import { Analytics, Calendar, Settings, Notifications } from './pages/More';
@@ -18,6 +19,7 @@ export default function App() {
         </a>
         <RouteFocus />
         <CommandPalette />
+        <ShortcutsHelp />
         <Sidebar />
         <main id="main-content" tabIndex={-1} className="flex-1 px-6 pb-10 max-w-6xl mx-auto w-full">
           <nav className="md:hidden flex gap-3 py-3 text-sm text-white/60">

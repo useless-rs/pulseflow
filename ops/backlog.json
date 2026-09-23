@@ -280,7 +280,7 @@
    "impact": 2,
    "effort": 2,
    "risk": 1,
-   "status": "queued"
+   "status": "done"
   }
  ],
  "done": [
@@ -318,6 +318,7 @@
    "cycle 31: drawer delete flow e2e coverage (confirm accept)",
    "cycle 32: notifications mark-all-read (endpoint + UI + e2e)",
    "cycle 33: sidebar unread notification badge",
-   "cycle 34: overdue digest on Dashboard (count + link)"
+   "cycle 34: overdue digest on Dashboard (count + link)",
+   "cycle 35: keyboard shortcuts help overlay (Shift+?)"
   ]
 }
